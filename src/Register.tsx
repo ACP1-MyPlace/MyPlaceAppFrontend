@@ -7,15 +7,6 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import './Register.css';
-import { DefaultComponentProps } from '@mui/material/OverridableComponent';
-
-const themeButton = createTheme({
-  palette: {
-    primary: {
-      main: '#FF385C',
-    },
-  },
-});
 
 type RegisterProps = {}
 type RegisterState = { 
@@ -24,13 +15,21 @@ type RegisterState = {
     email: string, 
     password: string, 
     repeatedPassword: string,
+    isHost: boolean
   }
  
 class Register extends Component<RegisterProps, RegisterState> {
 
     constructor(props: RegisterProps){
         super(props);
-        this.state = {firstName: 'John', lastName: 'Doe', email : 'john@gmail.com', password: '****', repeatedPassword: '****'}
+        this.state = {
+            firstName: 'John', 
+            lastName: 'Doe', 
+            email : 'john@gmail.com', 
+            password: '******', 
+            repeatedPassword: '******', 
+            isHost: true
+        }
     }
 
     render(){
@@ -67,8 +66,8 @@ class Register extends Component<RegisterProps, RegisterState> {
                     value={this.state.repeatedPassword}/>
                 </form>
                 <div className='checklist'>
-                    {checkbox('Anfitrion')}
-                    {checkbox('Huesped')}
+                    {checkbox('Anfitrión', this.state.isHost, () => this.setState({isHost: true}))}
+                    {checkbox('Huesped', !this.state.isHost, () => this.setState({isHost: false}))}
                 </div>
                 <div className='button-container'>
                 <ThemeProvider theme={themeButton}>
@@ -84,16 +83,17 @@ class Register extends Component<RegisterProps, RegisterState> {
     async registerHandler(){
         const email = this.state.email
         const password = this.state.password
-        const repeatedPassword = this.state.password
+        const repeatedPassword = this.state.password // validar que sea igual al password
         const firstName = this.state.firstName
         const lastName = this.state.lastName
+        const isHost = this.state.isHost
         const URL = "http://localhost:8080/api/v1/users/register";
         const body = {
             mail: email,
             password: password,
             firstName: firstName,
             lastName: lastName,
-            type: "HOST_USER"
+            type: isHost ? "HOST_USER" : "TRAVELER_USER"
         }
         try {
             const response = await fetch(URL, 
@@ -108,13 +108,21 @@ class Register extends Component<RegisterProps, RegisterState> {
                 alert('An error has ocurred')
             }
         } catch {
-    
+            alert('No response from server')
         }
     }
 
 }
 
-function checkbox(name: string) {
+const themeButton = createTheme({
+    palette: {
+      primary: {
+        main: '#FF385C',
+      },
+    },
+  });
+
+function checkbox(name: string, checked: boolean, onChange: any) {
     return (
         <FormControlLabel 
             label={name} 
@@ -122,7 +130,8 @@ function checkbox(name: string) {
                 <Checkbox 
                     icon={<RadioButtonUncheckedIcon />}
                     checkedIcon={<RadioButtonCheckedIcon />}
-                    onChange={()=> 'Hola'} 
+                    checked={checked}
+                    onChange={onChange} 
                     sx={{
                         color: '#747474',
                         '&.Mui-checked': {color: '#FF385C'}
