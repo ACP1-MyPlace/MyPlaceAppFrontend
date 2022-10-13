@@ -1,0 +1,31 @@
+.register-section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 133.4%;
+    color: #FF385C;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.button-container {
+    margin-top: 16px;
+    width: 50%;
+}
+
+.checklist {
+    justify-content: space-around;
+    display: flex;
+    width: 50%;
+}
+
