@@ -83,7 +83,15 @@ class Register extends Component<RegisterProps, RegisterState> {
     async registerHandler(){
         const email = this.state.email
         const password = this.state.password
-        const repeatedPassword = this.state.password // validar que sea igual al password
+        const repeatedPassword = this.state.repeatedPassword
+        if(password.length < 6){
+            alert('Password should have at least 6 characters')
+            return
+        }
+        if(password != repeatedPassword){
+            alert('Passwords are not the same')
+            return
+        }
         const firstName = this.state.firstName
         const lastName = this.state.lastName
         const isHost = this.state.isHost
