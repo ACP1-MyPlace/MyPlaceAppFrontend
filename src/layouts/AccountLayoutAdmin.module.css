@@ -1,0 +1,12 @@
+﻿.root {
+    text-align: -webkit-center;
+    margin-top: 7% !important
+}
+
+.contentForm {
+    padding-top: 5px;
+    padding-bottom: 20px;
+    justify-content: center;
+    border-radius: 17px;
+    min-width: 493px;
+}
