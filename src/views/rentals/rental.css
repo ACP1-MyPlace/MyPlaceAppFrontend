@@ -1,0 +1,88 @@
+
+.rental-address{
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 133.4%;
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FF385C;
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+
+
+
+.rental-header, .rental-data{
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.rental{
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.rental-price{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 133.4%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #3E3E3E;
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+
+.rental-reservation-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 133px;
+    gap: 10px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 133.4%;
+
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+    background: #FF385C;
+    border-radius: 13px;
+    border-style: none;
+}
+
+.rental-description-title{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 133.4%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #3E3E3E;
+}
+
+.rental-description-text{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 133.4%;
+    display: flex;
+    align-items: center;
+    color: #3E3E3E;
+}
