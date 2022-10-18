@@ -1,6 +1,6 @@
 import { IconButton,  Tooltip } from "@mui/material";
-import { BsWifi,  BsFillHouseFill, BsBuilding } from "react-icons/bs";
-import {FaDog, FaTshirt, FaSink} from "react-icons/fa";
+import { BsWifi,  BsFillHouseFill, BsBuilding, BsFillPersonFill } from "react-icons/bs";
+import {FaDog, FaTshirt, FaSink, FaBed, FaToilet} from "react-icons/fa";
 import {FiMonitor} from "react-icons/fi";
 import {AiFillCar} from "react-icons/ai";
 import React from "react";
@@ -29,21 +29,21 @@ const getRentalTypeIcon = (rental: IRental): React.ReactNode => {
 
 const mapServicesToText = (service : string) => {
     if(service=="WIFI"){
-        return <li className="rental-description-text"><BsWifi /> WIFI</li>
+        return <li className="rental-description-text"><BsWifi size={"25px"} style={{"marginRight":"5px"}}/> WIFI</li>
     }
     if(service=="TV"){
-        return <li className="rental-description-text"><FiMonitor /> TV</li>
+        return <li className="rental-description-text"><FiMonitor size={"25px"} style={{"marginRight":"5px"}}/> TV</li>
     }
     if(service=="GARAGE"){
-        return <li className="rental-description-text"><AiFillCar /> Garage</li>
+        return <li className="rental-description-text"><AiFillCar size={"25px"} style={{"marginRight":"5px"}}/> Garage</li>
     }
     if(service=="KITCHEN"){
-        return <li className="rental-description-text"><FaSink /> Cocina</li>
+        return <li className="rental-description-text"><FaSink size={"25px"} style={{"marginRight":"5px"}}/> Cocina</li>
     }
     if(service=="LAUNDRY"){
-        return <li className="rental-description-text"><FaTshirt /> Lavarropas</li>
+        return <li className="rental-description-text"><FaTshirt size={"25px"} style={{"marginRight":"5px"}}/> Lavarropas</li>
     }
-    return <li className="rental-description-text"><FaDog /> Pet Friendly</li>
+    return <li className="rental-description-text"><FaDog size={"25px"} style={{"marginRight":"5px"}}/> Pet Friendly</li>
 }
 
 const renderServices = (rental: IRental): React.ReactNode => {
@@ -51,44 +51,86 @@ const renderServices = (rental: IRental): React.ReactNode => {
     rental.garageAvailable && services.push("GARAGE")
     rental.petsAvailable && services.push("PET FRIENDLY") 
 
-    return services.map(mapServicesToText);
+    let firstColumn :string[] = []
+    let secondColumn :string[] = []
+
+    services.forEach((service,index) => {
+        if (index % 2 == 0){
+            firstColumn.push(service)
+        }
+        else{
+            secondColumn.push(service)
+        }
+    })
+
+    return <div className="row" style={{"marginLeft":"15px"}}>
+        <div className="col-3">
+            {firstColumn.map(mapServicesToText)}
+        </div>
+        <div className="col-3">
+            {secondColumn.map(mapServicesToText)}
+        </div>
+    </div>
+}
+
+const renderActionButton = (isHost: boolean) => {
+    // TODO llamar a los diferentes endpoints
+    if(!isHost){
+        return <button className="rental-reservation-button">Reservar</button>
+    }
+    return <div className="row">
+        <button className="col-1 rental-edit-button">Editar</button>
+        <button className="col-1 rental-delete-button">Eliminar</button>
+    </div>
+}
+
+const renderPrice = (data : IRental) => {
+    return <h2 className="rental-price">{`$${data.price.amount} ${data.price.currency.currencyId} noche`} {getRentalTypeIcon(data)}</h2>
+}
+
+
+function renderRentalHeader(data: IRental, isHost: boolean) {
+    return <div className="row rental-header">
+
+        <div className="col-7">
+            <h2 className="rental-address">{data.country}, {data.state}</h2>
+            <h2 className="rental-address">{data.street} {data.streetNumber} {data.floor && `- ${data.floor} Piso`}</h2>
+        </div>
+
+        <div className="col-5">
+            {renderPrice(data)}
+            {renderActionButton(isHost)}
+        </div>
+
+    </div>;
 }
 
 export const Rental = (data : IRental) => {
+
+    // TODO determinar si es host o no en base al estado del token
+    const isHost = false
     
     return <div className="rental">
-        <div className="row rental-header">
-
-            <div className="col-7">
-                <h2 className="rental-address">Argentina, CABA</h2>
-                <h2 className="rental-address">Av. de Mayo 254 - 3 piso</h2>
-            </div>
-
-            <div className="col-5">
-                <h2 className="rental-price">$200 USD noche {getRentalTypeIcon(data)}</h2>
-                <button className="rental-reservation-button">Reservar</button>
-            </div>
-
-
-        </div>
+        {renderRentalHeader(data, isHost)}
 
         <div className="row rental-body">
             <div className="col-5">
-            <img
+                <img
                     src={'https://preview.redd.it/1b6g811jhyi51.jpg?auto=webp&s=c3ae56a6f878ea0673076d6b4044ffc5b863baad'}
                     alt="Photo of rental"
-                    style={{ width: 600, borderRadius: 50 }}
+                    className="img-fluid"
+                    style={{ borderRadius: 50 }}
                 />
             </div>
 
-            <div className="col-7 rental-data">
+            <div className="col-7">
                 <div>
-                    <h3 className="rental-description-title">Descripcion</h3>
+                    <h3 className="rental-description-title">Descripción</h3>
                     <p className="rental-description-text">{data.description}</p>
                     <ul>
-                        <li className="rental-description-text">4 habitaciones</li>
-                        <li className="rental-description-text">2 baños</li>
-                        <li className="rental-description-text">Máximo 6 huespedes</li>
+                        {data.roomsCount && <li className="rental-description-text"> <FaBed size={"25px"} style={{"marginRight":"5px"}}/> {data.roomsCount} habitaciones</li>}
+                        {data.bathroomCount && <li className="rental-description-text"> <FaToilet size={"25px"} style={{"marginRight":"5px"}}/> {data.bathroomCount} baños</li>}
+                        <li className="rental-description-text"> <BsFillPersonFill size={"25px"} style={{"marginRight":"5px"}}/>  Máximo 6 huespedes</li>
                     </ul>
                 
                 </div>

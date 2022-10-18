@@ -83,11 +83,41 @@
     display: flex;
     margin-top: 0%;
     margin-bottom: 0%;
+    margin-right: 5%;
     align-items: center;
     color: #3E3E3E;
 }
 
-.rental-data{
-    /* margin-left: 20px;
-    margin-right: 30px; */
+.rental-delete-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 133px;
+    gap: 10px;
+    background: #FF002E;
+    border-radius: 13px;
+    border-style: none;
+    color: #FFFFFF;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 133.4%;
+}
+
+.rental-edit-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 133px;
+    gap: 10px;
+    background: #6AB151;
+    border-radius: 13px;
+    border-style: none;
+    color: #FFFFFF;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 133.4%;
 }
