@@ -53,25 +53,23 @@ function Login () {
     }
     
     return (
-        <AccountLayoutAdmin>
-            <form onSubmit={handleSubmit(onLogin)}>
-                <Stack spacing={2}>
-                    <ControlledTextField label="Email"
-                                         control={control}
-                                         name={LoginFormFields.Email}
-                    />
-                    
-                    <ControlledTextFieldPassword label="Password"
-                                                 control={control}
-                                                 name={LoginFormFields.Password}
-                    />
-                    
-                    <Button variant="contained" type="submit">
-                        Ingresar
-                    </Button>
-                </Stack>
-            </form>
-        </AccountLayoutAdmin>
+        <form onSubmit={handleSubmit(onLogin)}>
+            <Stack spacing={2}>
+                <ControlledTextField label="Email"
+                                     control={control}
+                                     name={LoginFormFields.Email}
+                />
+                
+                <ControlledTextFieldPassword label="Password"
+                                             control={control}
+                                             name={LoginFormFields.Password}
+                />
+                
+                <Button variant="contained" type="submit">
+                    Ingresar
+                </Button>
+            </Stack>
+        </form>
     );
 } 
 
