@@ -2,10 +2,6 @@ import React, {Component} from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Checkbox from '@mui/material/Checkbox';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import './Register.css';
 import './Place.css';
 
@@ -86,17 +82,19 @@ class Register extends Component<PlaceProps, PlaceState> {
     }
    
     async registerHandler(){
-        const email = this.state.description
-        const password = this.state.price_per_night
-        const repeatedPassword = this.state.number_occupants
-        const firstName = this.state.country
-        const lastName = this.state.address
-        const URL = "http://localhost:8080/api/v1/users/register";
+        const desc = this.state.description
+        const ppn = this.state.price_per_night
+        const nocc = this.state.number_occupants
+        const country = this.state.country
+        const addr = this.state.address
+        const URL = "http://localhost:8080/api/v1/****/****";
         const body = {
-            mail: email,
-            password: password,
-            firstName: firstName,
-            lastName: lastName,
+            country: country,
+            address: addr,
+            n_occupants: nocc,
+            description: desc,
+            price_per_night: ppn,
+            type: this.state.place_type
         }
         try {
             const response = await fetch(URL, 
