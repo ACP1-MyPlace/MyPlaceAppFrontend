@@ -1,0 +1,123 @@
+
+.rental-address{
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 133.4%;
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FF385C;
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+
+
+
+.rental-header, .rental-body{
+    margin-bottom: 10px;
+}
+
+.rental{
+    margin-top: 50px;
+    margin-left: 30px;
+}
+
+.rental-price{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 133.4%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #3E3E3E;
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+
+.rental-reservation-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 133px;
+    gap: 10px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 133.4%;
+
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+
+    background: #FF385C;
+    border-radius: 13px;
+    border-style: none;
+}
+
+.rental-description-title{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 133.4%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 0%;
+    margin-top: 2%;
+    color: #3E3E3E;
+}
+
+.rental-description-text{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 133.4%;
+    display: flex;
+    margin-top: 0%;
+    margin-bottom: 0%;
+    margin-right: 5%;
+    align-items: center;
+    color: #3E3E3E;
+}
+
+.rental-delete-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 133px;
+    gap: 10px;
+    background: #FF002E;
+    border-radius: 13px;
+    border-style: none;
+    color: #FFFFFF;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 133.4%;
+}
+
+.rental-edit-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 133px;
+    gap: 10px;
+    background: #6AB151;
+    border-radius: 13px;
+    border-style: none;
+    color: #FFFFFF;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 133.4%;
+}
