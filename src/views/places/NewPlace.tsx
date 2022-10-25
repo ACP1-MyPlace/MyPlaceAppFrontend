@@ -1,40 +1,33 @@
 ﻿import React from "react";
 import {Button, Card, CardActions, CardContent, CardHeader, Grid} from "@mui/material";
-import {useForm} from "react-hook-form";
+import {FormProvider, useForm} from "react-hook-form";
 import {ControlledTextField} from "../../components/ControlledTextField";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
-enum NewPlaceFields {
-    Country = 'country',
-    Address = 'address',
-    PricePerNight = 'price_per_night',
-    PlaceType = 'place_type',
-    Description = 'description',
-    NumberOccupants = 'number_occupants',
-}
-
-interface NewPlaceForm {
-    [NewPlaceFields.Country]: string,
-    [NewPlaceFields.Address]: string,
-    [NewPlaceFields.PricePerNight]: number,
-    [NewPlaceFields.PlaceType]: string,
-    [NewPlaceFields.Description]: string,
-    [NewPlaceFields.NumberOccupants]: number,
-}
+import {NewPlaceForm, PlaceFields, PropertyType} from "../../types/PlacesTypes";
+import NewPlaceServices from "./NewPlaceServices";
+import NewPlaceTypes from "./NewPlaceTypes";
 
 function NewPlace() {
     
     const newPlaceSchema = yup.object().shape({
-        [NewPlaceFields.Country]: yup.string().required('Campo obligatorio'),
-        [NewPlaceFields.Address]: yup.string().required('Campo obligatorio'),
-        [NewPlaceFields.PricePerNight]: yup.number().required('Campo obligatorio'),
-        [NewPlaceFields.PlaceType]: yup.string().required('Campo obligatorio'),
-        [NewPlaceFields.Description]: yup.string().required('Campo obligatorio'),
-        [NewPlaceFields.NumberOccupants]: yup.number().required('Campo obligatorio')
+        [PlaceFields.PropertyType]: yup.number().required('Campo obligatorio'),
+        [PlaceFields.Country]: yup.string().required('Campo obligatorio'),
+        [PlaceFields.State]: yup.string().required('Campo obligatorio'),
+        [PlaceFields.Street]: yup.string().required('Campo obligatorio'),
+        [PlaceFields.StreetNumber]: yup.number().required('Campo obligatorio'),
+        [PlaceFields.RoomsCount]: yup.number().required('Campo obligatorio'),
+        [PlaceFields.BathroomCount]: yup.number().required('Campo obligatorio'),
+        [PlaceFields.PricePerNight]: yup.number().required('Campo obligatorio')
     })
-    
-    const { control, handleSubmit } = useForm<NewPlaceForm>({
+
+    const methods = useForm<NewPlaceForm>({
+        defaultValues: {
+            [PlaceFields.PropertyType]: PropertyType.HOUSE,
+            [PlaceFields.Services]: [],
+            [PlaceFields.RoomsCount]: 0,
+            [PlaceFields.BathroomCount]: 0,
+        },
         resolver: yupResolver(newPlaceSchema)
     });
     
@@ -60,56 +53,87 @@ function NewPlace() {
     
     return (
         <Grid container justifyContent="center">
-            <Grid item xs={8}>
+            <Grid item xs={9}>
                 <Card>
                     <CardHeader title="Nuevo Alojamiento" />
                     
-                    <form onSubmit={handleSubmit(onNewPlace)}>
+                    <form onSubmit={methods.handleSubmit(onNewPlace)}>
                         <CardContent>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={3}>
                                     <ControlledTextField label="Pais"
-                                                         control={control}
-                                                         name={NewPlaceFields.Country}
+                                                         control={methods.control}
+                                                         name={PlaceFields.Country}
                                                          fullWidth
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <ControlledTextField label="Dirección"
-                                                         control={control}
-                                                         name={NewPlaceFields.Address}
+                                    <ControlledTextField label="Estado"
+                                                         control={methods.control}
+                                                         name={PlaceFields.State}
+                                                         fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <FormProvider { ...methods }>
+                                        <NewPlaceTypes />
+                                    </FormProvider>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <ControlledTextField label="Calle"
+                                                         control={methods.control}
+                                                         name={PlaceFields.Street}
+                                                         fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    <ControlledTextField label="Número"
+                                                         control={methods.control}
+                                                         name={PlaceFields.StreetNumber}
+                                                         fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    <ControlledTextField label="Piso"
+                                                         control={methods.control}
+                                                         name={PlaceFields.Floor}
+                                                         fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    <ControlledTextField label="Departamento"
+                                                         control={methods.control}
+                                                         name={PlaceFields.Apartment}
                                                          fullWidth
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <ControlledTextField label="Tipo"
-                                                         control={control}
-                                                         name={NewPlaceFields.Address}
+                                    <ControlledTextField label="Cantidad de Dormitorios"
+                                                         control={methods.control}
+                                                         name={PlaceFields.RoomsCount}
+                                                         fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <ControlledTextField label="Cantidad de Baños"
+                                                         control={methods.control}
+                                                         name={PlaceFields.BathroomCount}
                                                          fullWidth
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <ControlledTextField label="Precio por noche"
-                                                         control={control}
-                                                         name={NewPlaceFields.PricePerNight}
+                                                         control={methods.control}
+                                                         name={PlaceFields.PricePerNight}
                                                          fullWidth
                                     />
                                 </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <ControlledTextField label="Cantidad de huéspedes"
-                                                         control={control}
-                                                         name={NewPlaceFields.NumberOccupants}
-                                                         fullWidth
-                                    />
-                                </Grid>
+                            </Grid>
+                            <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <ControlledTextField label="Descripción"
-                                                         control={control}
-                                                         name={NewPlaceFields.NumberOccupants}
-                                                         fullWidth
-                                                         multiline
-                                                         minRows={2}
-                                    />
+                                    <FormProvider { ...methods }>
+                                        <NewPlaceServices />
+                                    </FormProvider>
                                 </Grid>
                             </Grid>
                         </CardContent>
