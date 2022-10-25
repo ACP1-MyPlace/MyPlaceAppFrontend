@@ -30,8 +30,28 @@ export interface NewPlaceForm {
     [PlaceFields.GarageAvailable]: boolean,
     [PlaceFields.PetsAvailable]: boolean,
     [PlaceFields.Services]: number[],
-    [PlaceFields.PricePerNight]: number,
+    [PlaceFields.PricePerNight]: PriceType,
     [PlaceFields.Description]?: string,
+}
+
+export enum CurrencyTypeFields {
+    Id = 'currencyId',
+    Name = 'currencyName'
+}
+
+export interface CurrencyType {
+    [CurrencyTypeFields.Id]: string,
+    [CurrencyTypeFields.Name]: string,
+}
+
+export enum PriceTypeFields {
+    Currency = "currency",
+    Amount = 'amount'
+}
+
+export interface PriceType {
+    [PriceTypeFields.Currency]: CurrencyType,
+    [PriceTypeFields.Amount]: number
 }
 
 export enum AccommodationService {

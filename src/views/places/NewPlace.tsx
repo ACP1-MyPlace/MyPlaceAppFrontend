@@ -4,7 +4,7 @@ import {FormProvider, useForm} from "react-hook-form";
 import {ControlledTextField} from "../../components/ControlledTextField";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {NewPlaceForm, PlaceFields, PropertyType} from "../../types/PlacesTypes";
+import {NewPlaceForm, PlaceFields, PriceTypeFields, PropertyType} from "../../types/PlacesTypes";
 import NewPlaceServices from "./NewPlaceServices";
 import NewPlaceTypes from "./NewPlaceTypes";
 
@@ -18,21 +18,32 @@ function NewPlace() {
         [PlaceFields.StreetNumber]: yup.number().required('Campo obligatorio'),
         [PlaceFields.RoomsCount]: yup.number().required('Campo obligatorio'),
         [PlaceFields.BathroomCount]: yup.number().required('Campo obligatorio'),
-        [PlaceFields.PricePerNight]: yup.number().required('Campo obligatorio')
-    })
+        [PlaceFields.PricePerNight]: yup.object().shape({
+            [PriceTypeFields.Amount]: yup.number().required('Campo obligatorio')
+        })
+    });
 
     const methods = useForm<NewPlaceForm>({
         defaultValues: {
+            [PlaceFields.UserId]: 1,
             [PlaceFields.PropertyType]: PropertyType.HOUSE,
             [PlaceFields.Services]: [],
             [PlaceFields.RoomsCount]: 0,
             [PlaceFields.BathroomCount]: 0,
+            [PlaceFields.GarageAvailable]: false,
+            [PlaceFields.PetsAvailable]: false,
+            [PlaceFields.PricePerNight]: {
+                [PriceTypeFields.Currency]: {
+                    currencyId: "USD",
+                    currencyName: "Dolares",
+                }
+            }
         },
         resolver: yupResolver(newPlaceSchema)
     });
     
     const onNewPlace = async (data: NewPlaceForm) => {
-        const URL = "http://localhost:8080/api/v1/****/****";
+        const URL = "http://localhost:8080/api/v1/accommodations";
         
         try {
             const response = await fetch(URL,
@@ -42,7 +53,7 @@ function NewPlace() {
                     body: JSON.stringify(data)
                 })
             if(response.status === 200) {
-                alert('User created successfully')
+                alert('Place created successfully')
             } else {
                 alert('An error has ocurred')
             }
@@ -124,7 +135,7 @@ function NewPlace() {
                                 <Grid item xs={12} md={3}>
                                     <ControlledTextField label="Precio por noche"
                                                          control={methods.control}
-                                                         name={PlaceFields.PricePerNight}
+                                                         name={`${PlaceFields.PricePerNight}.${PriceTypeFields.Amount}`}
                                                          fullWidth
                                     />
                                 </Grid>
