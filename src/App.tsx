@@ -10,14 +10,22 @@ import { Rentals } from './views/allRentals/Rentals';
 import { sampleData } from './sampleData/Rentals';
 import { Booking } from './views/booking/Booking';
 import { sampleData as bookingSD } from './sampleData/Booking';
+import NavBar from './components/Navbar';
 
-function App() {
-  return (
-    <div>
-      <BrowserRouter>
+const NotLoggedInWeb = () => {
+  return <>
         <Routes>
-          <Route path="/" element={<AuthPage />} />
-          <Route path="/auth" element={<AuthPage />} />
+            <Route path="/" element={<AuthPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+        </Routes>
+  </>
+}
+
+const LoggedInWeb = () => {
+  return <>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Rentals {...sampleData} />} />
           <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
           <Route path="/booking" element={<Booking {...bookingSD}/>}/>
           <Route path="/rentals" element={<Rentals {...sampleData} />}/>
@@ -26,6 +34,16 @@ function App() {
             <Route path="/newplace" element={<NewPlace />} />
           </Route>
         </Routes>
+  </>
+}
+
+function App() {
+  const loggedIn = true // check if there is a token
+  return (
+    <div>
+      <BrowserRouter>
+        {!loggedIn && <NotLoggedInWeb />}
+        {loggedIn && <LoggedInWeb />}
       </BrowserRouter>
     </div>
   );
