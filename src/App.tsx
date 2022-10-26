@@ -8,6 +8,8 @@ import AuthPage from "./views/auth/AuthPage";
 import { Rental } from './views/rentals/Rental';
 import { Rentals } from './views/allRentals/Rentals';
 import { sampleData } from './sampleData/Rentals';
+import { Booking } from './views/booking/Booking';
+import { sampleData as bookingSD } from './sampleData/Booking';
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
           <Route path="/" element={<AuthPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
+          <Route path="/booking" element={<Booking {...bookingSD}/>}/>
           <Route path="/rentals" element={<Rentals {...sampleData} />}/>
 
           <Route element={<LayoutHome />}>

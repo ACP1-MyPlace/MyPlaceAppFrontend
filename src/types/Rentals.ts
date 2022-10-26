@@ -1,12 +1,5 @@
 import { User } from "./User";
-
-interface Price{
-    currency: {
-        currencyId:string,
-        currencyName:string
-    },
-    amount: number
-}
+import { Price } from "./Price";
 
 export interface Rental {
     host: User;
