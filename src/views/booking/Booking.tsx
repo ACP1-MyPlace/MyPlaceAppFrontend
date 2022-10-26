@@ -9,6 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { BookingLayout } from "../../layouts/BookingLayout";
 
 import "./booking.css";
 
@@ -24,8 +25,8 @@ export const Booking = (data : IBooking) => {
 
       
     return (
-        
-        <Card sx={{ minWidth: '493px' }}>
+        <BookingLayout>
+            <Card sx={{ minWidth: '70%' }}>
                 <CardContent>
                     <Typography variant="h1" color="primary" mb={2}>
                         MY PLACE
@@ -90,6 +91,7 @@ export const Booking = (data : IBooking) => {
                     </Button>
                 </CardActions>
             </Card>
+        </BookingLayout>
     )
 }
 
