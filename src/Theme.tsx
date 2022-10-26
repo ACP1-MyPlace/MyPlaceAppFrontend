@@ -5,6 +5,9 @@ const theme = createTheme ({
     palette: {
         primary: {
             main: '#FF385C'
+        },
+        secondary: {
+            main: '#515151'
         }
     },
     
@@ -20,6 +23,13 @@ const theme = createTheme ({
             fontStyle: 'normal', 
             fontWeight: 700, 
             fontSize: '48px',
+            lineHeight: '133.4%', 
+        },
+
+        h3: {
+            fontStyle: 'normal', 
+            fontWeight: 300, 
+            fontSize: '30px',
             lineHeight: '133.4%', 
         }
     },
