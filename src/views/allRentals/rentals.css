@@ -1,0 +1,45 @@
+.rentals-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1300px;
+}
+
+.rental-container {
+    padding: 30px;
+}
+
+.rental-title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 133.4%;
+    color: #3E3E3E;
+    margin: 0px;
+}
+
+.rental-subtitle {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 133.4%;
+    color: #6C6767;
+    margin: 0px;
+}
+
+.rental-price {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 133.4%;
+    color: #3E3E3E;
+    display: inline;
+}
+
+.rental-night {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 133.4%;
+    color: #3E3E3E;
+    display: inline;
+}
