@@ -2,9 +2,12 @@
 import React from "react";
 import { Rental as IRental } from "../../types/Rentals";
 import "./rentals.css";
+import { useNavigate } from "react-router-dom";
+  
 
 
 export const Rentals = (data : IRental[]) => {
+
     return (
         <section className="rentals-section">
             <div className="rentals-container">
@@ -18,8 +21,15 @@ export const Rentals = (data : IRental[]) => {
 }
 
 const renderRental = (rental: IRental): React.ReactNode => {
+    let navigate = useNavigate(); 
+
+    const routeChange = (rental: IRental) =>{ 
+      let path = `/rental`; 
+      navigate(path, rental);
+    }
+
     return (
-        <div className="rental-container">
+        <div className="rental-container" onClick={() => routeChange(rental)}>
             <img
                 src={'https://preview.redd.it/1b6g811jhyi51.jpg?auto=webp&s=c3ae56a6f878ea0673076d6b4044ffc5b863baad'}
                 alt="Photo of rental"
