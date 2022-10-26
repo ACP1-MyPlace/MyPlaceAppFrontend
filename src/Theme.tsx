@@ -25,7 +25,27 @@ const theme = createTheme ({
     },
 
     components: {
-
+        
+        MuiCardActions: {
+            styleOverrides: {
+                root: {
+                    borderTop: '1px solid #D2D2D2'
+                }
+            }
+        },
+        
+        MuiCardHeader: {
+            styleOverrides: {
+                root: {
+                    borderBottom: '1px solid #D2D2D2'
+                },
+                title: {
+                    color: '#FF385C',
+                    fontWeight: 600,
+                    fontSize: '25px',
+                }
+            }
+        }
     },
 });
 

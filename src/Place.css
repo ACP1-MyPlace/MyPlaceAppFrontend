@@ -1,0 +1,21 @@
+.subtitle {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32;
+    line-height: 133.4%;
+    color: #FF385C;
+}
+
+.register-form-large {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 150%
+}
+
+.register-form-row {
+    display: flex;
+    flex-direction: row;
+    gap: fill;
+    width: 100%;
+}
