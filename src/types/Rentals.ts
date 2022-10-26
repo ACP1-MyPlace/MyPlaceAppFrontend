@@ -20,3 +20,5 @@ export interface Rental {
     description?: string;
     price: Price;
 }
+
+export interface Rentals extends Array<Rental>{};

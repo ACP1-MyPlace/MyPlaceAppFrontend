@@ -6,6 +6,8 @@ import {AiFillCar} from "react-icons/ai";
 import React from "react";
 import { Rental as IRental } from "../../types/Rentals";
 import "./rental.css";
+import { deleteProperty } from "./rentalActions";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 
 const getRentalTypeIcon = (rental: IRental): React.ReactNode => {
@@ -73,14 +75,15 @@ const renderServices = (rental: IRental): React.ReactNode => {
     </div>
 }
 
-const renderActionButton = (isHost: boolean) => {
-    // TODO llamar a los diferentes endpoints
+const renderActionButton = (isHost: boolean, id:number, navigate: NavigateFunction) => {
     if(!isHost){
         return <button className="rental-reservation-button">Reservar</button>
     }
     return <div className="row">
         <button className="col-1 rental-edit-button">Editar</button>
-        <button className="col-1 rental-delete-button">Eliminar</button>
+        <button className="col-1 rental-delete-button" onClick={() => {
+            deleteProperty(id).then(() => {navigate("/")}).catch(err => console.error(err))
+        }}>Eliminar</button>
     </div>
 }
 
@@ -89,7 +92,7 @@ const renderPrice = (data : IRental) => {
 }
 
 
-function renderRentalHeader(data: IRental, isHost: boolean) {
+function renderRentalHeader(data: IRental, isHost: boolean, navigate: NavigateFunction) {
     return <div className="row rental-header">
 
         <div className="col-7">
@@ -99,19 +102,19 @@ function renderRentalHeader(data: IRental, isHost: boolean) {
 
         <div className="col-5">
             {renderPrice(data)}
-            {renderActionButton(isHost)}
+            {renderActionButton(isHost, data.id, navigate)}
         </div>
 
     </div>;
 }
 
 export const Rental = (data : IRental) => {
-
+    let navigate = useNavigate();
     // TODO determinar si es host o no en base al estado del token
-    const isHost = false
+    const isHost = true
     
     return <div className="rental">
-        {renderRentalHeader(data, isHost)}
+        {renderRentalHeader(data, isHost, navigate)}
 
         <div className="row rental-body">
             <div className="col-5">
