@@ -13,7 +13,7 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Register />} />
+          <Route path="/" element={<AuthPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
 
