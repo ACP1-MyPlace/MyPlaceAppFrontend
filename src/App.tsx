@@ -12,6 +12,7 @@ import { sampleData as bookingSD } from './sampleData/Booking';
 import NavBar from './components/Navbar';
 import {PrivateRoute} from "./components/PrivateRoute";
 import {PublicWithoutUserRoute} from "./components/PublicWithoutUserRoute";
+import {userStorage} from "./userSession/userStorage";
 
 const NotLoggedInWeb = () => {
   return <>
@@ -23,9 +24,10 @@ const NotLoggedInWeb = () => {
   </>
 }
 
-const LoggedInWeb = () => {
+const LoggedInWeb = () => {    
   return <>
-        <NavBar />
+      { userStorage.isLogged() && <NavBar /> }
+        
         <Routes>
             <Route element={<PrivateRoute />}>
                   <Route path="/" element={<Rentals {...sampleData} />} />

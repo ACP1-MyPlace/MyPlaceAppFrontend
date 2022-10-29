@@ -1,5 +1,12 @@
-﻿interface UserDataSession {
+﻿import jwt_decode from "jwt-decode";
+
+interface UserDataSession {
     token: string
+}
+
+interface UserJwtDecode {
+    sub: string,
+    userType: string
 }
 
 class UserStorage {
@@ -15,6 +22,12 @@ class UserStorage {
         localStorage.setItem(this.keyAdminStorage, JSON.stringify(userSession));
     }
 
+    private decodeToken() : UserJwtDecode | null {
+        let token : string | null = this.getToken();
+
+        return (!!token) ? jwt_decode(token) as UserJwtDecode : null;
+    }
+    
     public get(): UserDataSession {
         return JSON.parse(
             localStorage.getItem(this.keyAdminStorage) as string
@@ -30,7 +43,14 @@ class UserStorage {
     public getToken() : string | null {
         let user : UserDataSession = this.get();
         
+        if (!user) return null;
+        
         return user.token;
+    }
+    
+    public getMail() : string | null {
+        let userDecode = this.decodeToken();
+        return userDecode ? userDecode.sub : null;
     }
 }
 
