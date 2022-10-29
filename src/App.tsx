@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom"
-import Login from "./views/auth/Login";
 import LayoutHome from "./layouts/LayoutHome";
 import NewPlace from "./views/places/NewPlace";
 import AuthPage from "./views/auth/AuthPage";
@@ -11,42 +10,48 @@ import { sampleData } from './sampleData/Rentals';
 import { Booking } from './views/booking/Booking';
 import { sampleData as bookingSD } from './sampleData/Booking';
 import NavBar from './components/Navbar';
+import {PrivateRoute} from "./components/PrivateRoute";
+import {PublicWithoutUserRoute} from "./components/PublicWithoutUserRoute";
+import {userStorage} from "./userSession/userStorage";
 
 const NotLoggedInWeb = () => {
   return <>
         <Routes>
-            <Route path="/" element={<AuthPage />} />
-            <Route path="/auth" element={<AuthPage />} />
+            <Route element={<PublicWithoutUserRoute />}>
+                <Route path="/auth" element={<AuthPage />} />
+            </Route>
         </Routes>
   </>
 }
 
-const LoggedInWeb = () => {
+const LoggedInWeb = () => {    
   return <>
-        <NavBar />
+      { userStorage.isLogged() && <NavBar /> }
+        
         <Routes>
-          <Route path="/" element={<Rentals {...sampleData} />} />
-          <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
-          <Route path="/booking" element={<Booking {...bookingSD}/>}/>
-          <Route path="/rentals" element={<Rentals {...sampleData} />}/>
-
-          <Route element={<LayoutHome />}>
-            <Route path="/newplace" element={<NewPlace />} />
-          </Route>
+            <Route element={<PrivateRoute />}>
+                  <Route path="/" element={<Rentals {...sampleData} />} />
+                  <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
+                  <Route path="/booking" element={<Booking {...bookingSD}/>}/>
+                  <Route path="/rentals" element={<Rentals {...sampleData} />}/>
+                    
+                  <Route element={<LayoutHome />}>
+                    <Route path="/newplace" element={<NewPlace />} />
+                  </Route>
+            </Route>
         </Routes>
   </>
 }
 
 function App() {
-  const loggedIn = true // check if there is a token
-  return (
-    <div>
-      <BrowserRouter>
-        {!loggedIn && <NotLoggedInWeb />}
-        {loggedIn && <LoggedInWeb />}
-      </BrowserRouter>
-    </div>
-  );
+    return (
+        <div>
+            <BrowserRouter>
+                <NotLoggedInWeb />
+                <LoggedInWeb />
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;
