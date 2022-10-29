@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import {userStorage} from "../userSession/userStorage";
+import './navbar.css'
 
 const renderHostActions = () => {
     return (
@@ -19,7 +20,7 @@ const NavBar = () => {
 
 	return (
         <div className='container'>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-light bg-light navbar-header">
                 
                 <Link className="navbar-brand" to="/" style={{'color':'#E74562'}}>My Place</Link>
             
