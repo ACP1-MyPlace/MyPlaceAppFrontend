@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -20,7 +20,8 @@ interface LoginForm {
 
 function Login () {
     const navigate = useNavigate();
-    
+    const [errorState, setErrorState] = useState({error: false, errorMsg: ''})
+
     const loginSchema = yup.object().shape({
         [LoginFormFields.Email]: yup.string().email('El campo debe ser un mail válido').required('Campo obligatorio'),
         [LoginFormFields.Password]: yup.string().required('Campo obligatorio'),
@@ -31,7 +32,7 @@ function Login () {
     });
     
     const onLogin = async (data: LoginForm) => {
-
+        setErrorState({error:false,errorMsg: ''})
         const URL = "http://localhost:8080/api/v1/users/login";
         const body = {
             mail: data[LoginFormFields.Email],
@@ -47,14 +48,16 @@ function Login () {
                 })
             if(response.status === 200) {
                 var dataResponse = await response.json();
-                alert('User successfully');
+                console.log('User logged in successfully');
                 userStorage.logInUser(dataResponse.token);
                 navigate('/');
             } else {
-                alert('An error has ocurred')
+                console.log('An error has ocurred')
+                setErrorState({error:true,errorMsg: 'Error: No se encontro el usuario'})
             }
         } catch {
-            alert('No response from server')
+            console.log('No response from server')
+            setErrorState({error:true,errorMsg: 'Error: No se tiene respuesta del servidor'})
         }
     }
     
@@ -74,6 +77,7 @@ function Login () {
                 <Button variant="contained" type="submit">
                     Ingresar
                 </Button>
+                {errorState.error && <div className="alert alert-danger animate__animated animate__flipInX"> {errorState.errorMsg} </div>}
             </Stack>
         </form>
     );
