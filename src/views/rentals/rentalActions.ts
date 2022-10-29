@@ -1,9 +1,9 @@
-
+import {userStorage} from "../../userSession/userStorage";
 
 export const deleteProperty = (id : number) => {
     return new Promise<void>(
         (resolve, reject) => {
-            const token = localStorage.getItem('token')
+            const token = userStorage.getToken()
             const URL = "http://localhost:8080/api/v1/accommodations/" + id;
 
             fetch(URL,

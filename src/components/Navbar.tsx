@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
+import {userStorage} from "../userSession/userStorage";
+
+const renderHostActions = () => {
+    return (
+        <li className="nav-item active">
+            <Link className="nav-link" to="/newplace">Añadir nuevo alojamiento</Link>
+        </li>
+    )
+}
 
 const NavBar = () => {
+
+    const [isHost, setHost] = useState(false)
+    useEffect(() => {
+        setHost(userStorage.isHost())
+    })
 
 	return (
         <div className='container'>
@@ -18,6 +32,12 @@ const NavBar = () => {
 
                         <li className="nav-item active">
                             <Link className="nav-link" to="/rentals">Alojamientos</Link>
+                        </li>
+
+                        {isHost && renderHostActions()}
+
+                        <li className="nav-item active">
+                            <Link className="nav-link" to="/auth" onClick={() => userStorage.logOutUser()}>Log out</Link>
                         </li>
 
                     </ul>

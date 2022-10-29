@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import LayoutHome from "./layouts/LayoutHome";
@@ -24,20 +24,32 @@ const NotLoggedInWeb = () => {
   </>
 }
 
-const LoggedInWeb = () => {    
-  return <>
-      { userStorage.isLogged() && <NavBar /> }
-        
+const LoggedInWeb = () => {
+    
+    const [isHost, setHost] = useState(false)
+    useEffect(() => {
+        setHost(userStorage.isHost())
+    })
+
+    const [isLogged, setLogged] = useState(true) // TODO revisarlo, esta renderizando la navbar cuando hace log out 
+    useEffect(() => {
+        setLogged(userStorage.isLogged())
+    },[userStorage.isLogged()])
+
+    return <>
+        {isLogged && <NavBar />}
         <Routes>
             <Route element={<PrivateRoute />}>
-                  <Route path="/" element={<Rentals {...sampleData} />} />
-                  <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
-                  <Route path="/booking" element={<Booking {...bookingSD}/>}/>
-                  <Route path="/rentals" element={<Rentals {...sampleData} />}/>
-                    
-                  <Route element={<LayoutHome />}>
-                    <Route path="/newplace" element={<NewPlace />} />
-                  </Route>
+                    <Route path="/" element={<Rentals {...sampleData} />} />
+                    <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
+                    {!isHost && <Route path="/booking" element={<Booking {...bookingSD}/>}/>}
+                    <Route path="/rentals" element={<Rentals {...sampleData} />}/>
+                
+                    {isHost &&
+                        <Route element={<LayoutHome />}>
+                            <Route path="/newplace" element={<NewPlace />} />
+                        </Route>
+                    }
             </Route>
         </Routes>
   </>

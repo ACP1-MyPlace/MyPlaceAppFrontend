@@ -9,7 +9,7 @@ import { Booking as IBooking } from "../../types/Booking";
 import "./rental.css";
 import { deleteProperty } from "./rentalActions";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-
+import {userStorage} from "../../userSession/userStorage";
 
 const getRentalTypeIcon = (rental: IRental): React.ReactNode => {
     if (rental.propertyType == "APARTMENT" ){
@@ -114,8 +114,7 @@ function renderRentalHeader(data: IRental, isHost: boolean, navigate: NavigateFu
 
 export const Rental = (data : IRental) => {
     let navigate = useNavigate();
-    // TODO determinar si es host o no en base al estado del token
-    const isHost = false
+    const isHost = userStorage.isHost()
     
     const [ error, setError ] = useState(false)
 
