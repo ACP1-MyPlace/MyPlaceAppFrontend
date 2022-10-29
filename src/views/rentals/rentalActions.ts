@@ -12,14 +12,14 @@ export const deleteProperty = (id : number) => {
                 headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer '+ token}
             }).then(response => {
                 if(response.status === 200) {
-                    alert('Property deleted successfully')
+                    console.log('Property deleted successfully')
                     resolve()
                     return;
                 } 
-                alert('An error has ocurred')
+                console.log("An error has ocurred")
                 reject()
             }).catch(error => {
-                alert('No response from server')
+                console.log("No response from the server", error)
                 reject()
             })
 
