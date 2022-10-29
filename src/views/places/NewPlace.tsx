@@ -1,4 +1,4 @@
-﻿import React from "react";
+﻿import React, { useState } from "react";
 import {Button, Card, CardActions, CardContent, CardHeader, Grid} from "@mui/material";
 import {FormProvider, useForm} from "react-hook-form";
 import {ControlledTextField} from "../../components/ControlledTextField";
@@ -10,6 +10,8 @@ import NewPlaceTypes from "./NewPlaceTypes";
 
 function NewPlace() {
     
+    const [statusState, setStatusState] = useState({error: false, message: ''})
+
     const newPlaceSchema = yup.object().shape({
         [PlaceFields.PropertyType]: yup.number().required('Campo obligatorio'),
         [PlaceFields.Country]: yup.string().required('Campo obligatorio'),
@@ -43,6 +45,7 @@ function NewPlace() {
     });
     
     const onNewPlace = async (data: NewPlaceForm) => {
+        setStatusState({error:false,message:''})
         const URL = "http://localhost:8080/api/v1/accommodations";
         
         try {
@@ -53,12 +56,15 @@ function NewPlace() {
                     body: JSON.stringify(data)
                 })
             if(response.status === 200) {
-                alert('Place created successfully')
+                console.log('Place created successfully')
+                setStatusState({error:false,message:'Alojamiento creado exitosamente'})
             } else {
-                alert('An error has ocurred')
+                console.log('An error has ocurred')
+                setStatusState({error:true,message:'Ocurrio un error creando el alojamiento'})
             }
         } catch {
-            alert('No response from server')
+            console.log('No response from server')
+            setStatusState({error:true,message:'No hay respuesta del servidor'})
         }
     }
     
@@ -155,6 +161,10 @@ function NewPlace() {
                         </CardActions>
                     </form>
                 </Card>
+
+                &nbsp;
+                {statusState.error &&  <div className="alert alert-danger animate__animated animate__flipInX"> {statusState.message} </div>}
+                {!statusState.error && statusState.message.length!=0 && <div className="alert alert-success animate__animated animate__flipInX"> {statusState.message} </div>}
             </Grid>
         </Grid>
     )
