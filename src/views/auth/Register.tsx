@@ -16,7 +16,9 @@ type RegisterState = {
     email: string,
     password: string,
     repeatedPassword: string,
-    isHost: boolean
+    isHost: boolean,
+    error: boolean,
+    message: string
 }
 
 class Register extends Component<RegisterProps, RegisterState> {
@@ -29,7 +31,9 @@ class Register extends Component<RegisterProps, RegisterState> {
             email : 'john@gmail.com',
             password: '******',
             repeatedPassword: '******',
-            isHost: true
+            isHost: true,
+            error: false,
+            message: ''
         }
     }
 
@@ -68,6 +72,8 @@ class Register extends Component<RegisterProps, RegisterState> {
                         {checkbox('Anfitrión', this.state.isHost, () => this.setState({isHost: true}))}
                         {checkbox('Huesped', !this.state.isHost, () => this.setState({isHost: false}))}
                     </div>
+                    {this.state.error && <div className="alert alert-danger animate__animated animate__flipInX"> {this.state.message} </div>}
+                    {!this.state.error && this.state.message.length!=0 && <div className="alert alert-success animate__animated animate__flipInX"> {this.state.message} </div>}
                     <Button fullWidth color="primary" variant="contained" onClick={()=>this.registerHandler()}>
                         CONFIRMAR
                     </Button>
@@ -77,15 +83,18 @@ class Register extends Component<RegisterProps, RegisterState> {
     }
 
     async registerHandler(){
+        this.setState({error:false, message:''})
         const email = this.state.email
         const password = this.state.password
         const repeatedPassword = this.state.repeatedPassword
         if(password.length < 6){
-            alert('Password should have at least 6 characters')
+            console.log('Password should have at least 6 characters')
+            this.setState({error: true, message: 'El password debe de tener por lo menos 6 caracteres'})
             return
         }
         if(password != repeatedPassword){
-            alert('Passwords are not the same')
+            console.log('Passwords are not the same')
+            this.setState({error: true, message: 'Los passwords no coinciden'})
             return
         }
         const firstName = this.state.firstName
@@ -107,24 +116,19 @@ class Register extends Component<RegisterProps, RegisterState> {
                     body: JSON.stringify(body)
                 })
             if(response.status === 200) {
-                alert('User created successfully')
+                console.log('User created successfully')
+                this.setState({message: 'Se registro exitosamente, inicie sesion'})
             } else {
-                alert('An error has ocurred')
+                console.log('An error has ocurred')
+                this.setState({error: true, message: 'Ocurrio un error creando al usuario'})
             }
         } catch {
-            alert('No response from server')
+            console.log('No response from server')
+            this.setState({error: true, message: 'El servidor no responde'})
         }
     }
 
 }
-
-const themeButton = createTheme({
-    palette: {
-        primary: {
-            main: '#FF385C',
-        },
-    },
-});
 
 function checkbox(name: string, checked: boolean, onChange: any) {
     return (
