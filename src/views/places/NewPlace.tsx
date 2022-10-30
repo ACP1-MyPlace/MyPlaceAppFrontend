@@ -1,5 +1,5 @@
 ﻿import React, { useState } from "react";
-import {Button, Card, CardActions, CardContent, CardHeader, Grid} from "@mui/material";
+import {Button, Card, CardActions, CardContent, CardHeader, Grid, Input} from "@mui/material";
 import {FormProvider, useForm} from "react-hook-form";
 import {ControlledTextField} from "../../components/ControlledTextField";
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -7,10 +7,14 @@ import * as yup from "yup";
 import {NewPlaceForm, PlaceFields, PriceTypeFields, PropertyType} from "../../types/PlacesTypes";
 import NewPlaceServices from "./NewPlaceServices";
 import NewPlaceTypes from "./NewPlaceTypes";
+import { handleUploadFirebaseImage } from "../../firebase/FirebaseHandler";
 
 function NewPlace() {
     
     const [statusState, setStatusState] = useState({error: false, message: ''})
+    const [photosInput, setPhotosInput] = useState("");
+    const [uploadedPhotos, setPhotosToUpload] = useState<FileList>();
+    const [uuidNamesFromPhotos, setUuidNamesFromPhotos] = useState<string[]>([]);
 
     const newPlaceSchema = yup.object().shape({
         [PlaceFields.PropertyType]: yup.number().required('Campo obligatorio'),
@@ -47,7 +51,14 @@ function NewPlace() {
     const onNewPlace = async (data: NewPlaceForm) => {
         setStatusState({error:false,message:''})
         const URL = "http://localhost:8080/api/v1/accommodations";
-        
+        let photosNames = []
+        try{
+            photosNames = await handleUploadPhotos();
+        } catch {
+            console.log('Error with firebase')
+            // setStatusState({error:true,message:'No se pudieron guardar las fotos'})
+        }
+
         try {
             const response = await fetch(URL,
                 {
@@ -66,6 +77,25 @@ function NewPlace() {
             console.log('No response from server')
             setStatusState({error:true,message:'No hay respuesta del servidor'})
         }
+    }
+
+    const handlePhotosSelection = (event:React.ChangeEvent<HTMLInputElement>) => {
+        setPhotosInput(event.target.value);
+        if(event.target.files){
+            setPhotosToUpload(event.target.files)
+        }
+    }
+    
+    const handleUploadPhotos = async () => {
+        if(!uploadedPhotos){
+            return []
+        }
+        const hashedNames :string[]= [];
+        for ( let i=0; i<uploadedPhotos.length; i++ ){
+            hashedNames.push(await handleUploadFirebaseImage(uploadedPhotos[i]));
+        }
+        setUuidNamesFromPhotos(hashedNames);
+        return hashedNames;
     }
     
     return (
@@ -151,6 +181,19 @@ function NewPlace() {
                                     <FormProvider { ...methods }>
                                         <NewPlaceServices />
                                     </FormProvider>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <Input
+                                        id="fileSelector"
+                                        type = "file"
+                                        name="Upload Photos"
+                                        value={photosInput}
+                                        inputProps = {{accept: "image/*", "multiple":true}}
+                                        style={{width:"100%", marginBottom: 10}}
+                                        onChange = {handlePhotosSelection}
+                                    />
                                 </Grid>
                             </Grid>
                         </CardContent>
