@@ -13,6 +13,8 @@ import NavBar from './components/Navbar';
 import {PrivateRoute} from "./components/PrivateRoute";
 import {PublicWithoutUserRoute} from "./components/PublicWithoutUserRoute";
 import {userStorage} from "./userSession/userStorage";
+import { HostRoute } from './components/HostRoute';
+import { TravelerRoute } from './components/TravelerRoute';
 
 const NotLoggedInWeb = () => {
   return <>
@@ -26,12 +28,6 @@ const NotLoggedInWeb = () => {
 
 const LoggedInWeb = () => {
 
-    
-    const [isHost, setHost] = useState(false)
-    useEffect(() => {
-        setHost(userStorage.isHost())
-    },[])
-
   return <>
         <Routes>
           <Route element={<LayoutHome />}>
@@ -39,10 +35,14 @@ const LoggedInWeb = () => {
 
                     <Route path="/" element={<Rentals {...sampleData} />} />
                     <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
-                    {!isHost && <Route path="/booking" element={<Booking {...bookingSD}/>}/>}
+                    
                     <Route path="/rentals" element={<Rentals {...sampleData} />}/>
-                
-                    {isHost && <Route path="/newplace" element={<NewPlace />} />}
+                    <Route element={<HostRoute />}>
+                      <Route path="/newplace" element={<NewPlace />} />
+                    </Route>
+                    <Route element={<TravelerRoute />}>
+                      <Route path="/booking" element={<Booking {...bookingSD}/>}/>
+                    </Route>
             </Route>
           </Route>
         </Routes>
