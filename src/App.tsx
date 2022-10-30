@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
-import {BrowserRouter, Route, Routes} from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import LayoutHome from "./layouts/LayoutHome";
 import NewPlace from "./views/places/NewPlace";
 import AuthPage from "./views/auth/AuthPage";
@@ -9,10 +9,8 @@ import { Rentals } from './views/allRentals/Rentals';
 import { sampleData } from './sampleData/Rentals';
 import { Booking } from './views/booking/Booking';
 import { sampleData as bookingSD } from './sampleData/Booking';
-import NavBar from './components/Navbar';
-import {PrivateRoute} from "./components/PrivateRoute";
-import {PublicWithoutUserRoute} from "./components/PublicWithoutUserRoute";
-import {userStorage} from "./userSession/userStorage";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { PublicWithoutUserRoute } from "./components/PublicWithoutUserRoute";
 import { HostRoute } from './components/HostRoute';
 import { TravelerRoute } from './components/TravelerRoute';
 
