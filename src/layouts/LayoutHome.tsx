@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import {Outlet} from 'react-router-dom';
 import {Container} from "@mui/material";
+import NavBar from "../components/Navbar";
 
 interface LayoutHomeProps {
     children?: React.ReactNode
@@ -8,11 +9,14 @@ interface LayoutHomeProps {
 
 function LayoutHome({ children }: LayoutHomeProps) {
     return (
-        <Container maxWidth="xl" sx={{ paddingTop: 5 }}>
-            {children}
-
-            <Outlet/>
-        </Container>
+        <>
+            <NavBar />
+            <Container maxWidth="xl" sx={{ paddingTop: 5 }}>
+                {children}
+    
+                <Outlet/>
+            </Container>
+        </>
     );
 }
 

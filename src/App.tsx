@@ -23,14 +23,13 @@ const NotLoggedInWeb = () => {
 
 const LoggedInWeb = () => {
   return <>
-        <NavBar />
         <Routes>
-          <Route path="/" element={<Rentals {...sampleData} />} />
-          <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
-          <Route path="/booking" element={<Booking {...bookingSD}/>}/>
-          <Route path="/rentals" element={<Rentals {...sampleData} />}/>
-
           <Route element={<LayoutHome />}>
+              <Route path="/" element={<Rentals {...sampleData} />} />
+              <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
+              <Route path="/booking" element={<Booking {...bookingSD}/>}/>
+              <Route path="/rentals" element={<Rentals {...sampleData} />}/>
+
             <Route path="/newplace" element={<NewPlace />} />
           </Route>
         </Routes>
