@@ -52,6 +52,11 @@ class UserStorage {
         let userDecode = this.decodeToken();
         return userDecode ? userDecode.sub : null;
     }
+
+    public isHost() : boolean {
+        let userDecode = this.decodeToken();
+        return userDecode ? userDecode.userType == "HOST_USER" : false;
+    }
 }
 
 export const userStorage = new UserStorage();

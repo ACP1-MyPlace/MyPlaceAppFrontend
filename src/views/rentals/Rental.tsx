@@ -3,12 +3,13 @@ import { BsWifi,  BsFillHouseFill, BsBuilding, BsFillPersonFill } from "react-ic
 import {FaDog, FaTshirt, FaSink, FaBed, FaToilet} from "react-icons/fa";
 import {FiMonitor} from "react-icons/fi";
 import {AiFillCar} from "react-icons/ai";
-import React from "react";
+import React, { useState } from "react";
 import { Rental as IRental } from "../../types/Rentals";
+import { Booking as IBooking } from "../../types/Booking";
 import "./rental.css";
 import { deleteProperty } from "./rentalActions";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-
+import {userStorage} from "../../userSession/userStorage";
 
 const getRentalTypeIcon = (rental: IRental): React.ReactNode => {
     if (rental.propertyType == "APARTMENT" ){
@@ -75,14 +76,17 @@ const renderServices = (rental: IRental): React.ReactNode => {
     </div>
 }
 
-const renderActionButton = (isHost: boolean, id:number, navigate: NavigateFunction) => {
+const renderActionButton = (isHost: boolean, rentalData:IRental, navigate: NavigateFunction, setError: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): any; (arg0: boolean): any; }) => {
     if(!isHost){
-        return <button className="rental-reservation-button">Reservar</button>
+        const data : IBooking = {price: rentalData.price}
+        return <button className="rental-reservation-button" onClick={()=> { navigate("/booking", {state: data}) }}>
+            Reservar
+            </button>
     }
     return <div className="row">
         <button className="col-1 rental-edit-button">Editar</button>
         <button className="col-1 rental-delete-button" onClick={() => {
-            deleteProperty(id).then(() => {navigate("/")}).catch(err => console.error(err))
+            deleteProperty(rentalData.id).then(() => {navigate("/")}).catch(err => setError(true))
         }}>Eliminar</button>
     </div>
 }
@@ -92,7 +96,7 @@ const renderPrice = (data : IRental) => {
 }
 
 
-function renderRentalHeader(data: IRental, isHost: boolean, navigate: NavigateFunction) {
+function renderRentalHeader(data: IRental, isHost: boolean, navigate: NavigateFunction, setError: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): any; }) {
     return <div className="row rental-header">
 
         <div className="col-7">
@@ -102,7 +106,7 @@ function renderRentalHeader(data: IRental, isHost: boolean, navigate: NavigateFu
 
         <div className="col-5">
             {renderPrice(data)}
-            {renderActionButton(isHost, data.id, navigate)}
+            {renderActionButton(isHost, data, navigate, setError)}
         </div>
 
     </div>;
@@ -110,13 +114,19 @@ function renderRentalHeader(data: IRental, isHost: boolean, navigate: NavigateFu
 
 export const Rental = (data : IRental) => {
     let navigate = useNavigate();
-    // TODO determinar si es host o no en base al estado del token
-    const isHost = true
+    const isHost = userStorage.isHost()
     
+    const [ error, setError ] = useState(false)
+
     return <div className="rental">
-        {renderRentalHeader(data, isHost, navigate)}
+        {renderRentalHeader(data, isHost, navigate, setError)}
+
+        <div className="container">
+            {error &&  <div className="alert alert-danger col-11 animate__animated animate__flipInX"> Error al realizar la acción </div>}
+        </div>
 
         <div className="row rental-body">
+
             <div className="col-5">
                 <img
                     src={'https://preview.redd.it/1b6g811jhyi51.jpg?auto=webp&s=c3ae56a6f878ea0673076d6b4044ffc5b863baad'}

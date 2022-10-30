@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -7,9 +7,22 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useNavigate } from 'react-router-dom';
+import {userStorage} from "../userSession/userStorage";
+import './navbar.css'
+
+const renderHostActions = () => {
+    return (
+
+            <Link className="nav-link" to="/newplace" style={{ color: 'grey' }}>Añadir nuevo alojamiento</Link>
+
+    )
+}
+
 
 const NavBar = () => {
-
+    let navigate = useNavigate();
+    const isHost = userStorage.isHost()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const isMenuOpen = Boolean(anchorEl);
@@ -19,6 +32,10 @@ const NavBar = () => {
     };
 
     const handleMenuClose = () => setAnchorEl(null);
+    const logOut = () => {
+        userStorage.logOutUser()
+        navigate("/auth")
+    }
 
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
@@ -39,6 +56,7 @@ const NavBar = () => {
         >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <MenuItem onClick={logOut}>Log out</MenuItem>
         </Menu>
     );
 
@@ -55,6 +73,8 @@ const NavBar = () => {
                         Alojamientos
                     </Link>
                     
+                    {isHost && renderHostActions()}
+                        
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
@@ -74,6 +94,7 @@ const NavBar = () => {
             {renderMenu}
         </Box>
     );
+
 };
 
 export default NavBar;

@@ -10,18 +10,19 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { BookingLayout } from "../../layouts/BookingLayout";
-
+import { useNavigate } from "react-router-dom";
 import "./booking.css";
 
 export const Booking = (data : IBooking) => {
+    let navigate = useNavigate();
 
     const [value, setValue] = React.useState<Dayjs | null>(
         dayjs('2014-08-18T21:11:54'),
-      );
-    
-      const handleChange = (newValue: Dayjs | null) => {
+    );
+
+    const handleChange = (newValue: Dayjs | null) => {
         setValue(newValue);
-      };
+    };
 
       
     return (
@@ -83,7 +84,7 @@ export const Booking = (data : IBooking) => {
                     </Grid>
                 </CardContent>
                 <CardActions>
-                    <Button fullWidth color="secondary" variant="contained">
+                    <Button fullWidth color="secondary" variant="contained" onClick={ () => {navigate("/")}}>
                         CANCELAR
                     </Button>
                     <Button fullWidth color="primary" variant="contained">
