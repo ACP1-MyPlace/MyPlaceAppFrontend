@@ -30,7 +30,7 @@ const LoggedInWeb = () => {
     const [isHost, setHost] = useState(false)
     useEffect(() => {
         setHost(userStorage.isHost())
-    })
+    },[])
 
   return <>
         <Routes>
