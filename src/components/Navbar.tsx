@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+
 import {userStorage} from "../userSession/userStorage";
 import './navbar.css'
 
@@ -11,41 +19,80 @@ const renderHostActions = () => {
     )
 }
 
+
 const NavBar = () => {
 
-    const [isHost, setHost] = useState(false)
-    useEffect(() => {
-        setHost(userStorage.isHost())
-    })
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-	return (
-        <div className='container'>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light navbar-header">
-                
-                <Link className="navbar-brand" to="/" style={{'color':'#E74562'}}>My Place</Link>
-            
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
+    const isMenuOpen = Boolean(anchorEl);
 
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav mr-auto">
+    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-                        <li className="nav-item active">
-                            <Link className="nav-link" to="/rentals">Alojamientos</Link>
-                        </li>
+    const handleMenuClose = () => setAnchorEl(null);
 
-                        {isHost && renderHostActions()}
+    const menuId = 'primary-search-account-menu';
+    const renderMenu = (
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+        >
+            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        </Menu>
+    );
 
-                        <li className="nav-item active">
-                            <Link className="nav-link" to="/auth" onClick={() => userStorage.logOutUser()}>Log out</Link>
-                        </li>
+    return (
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static" sx={{ backgroundColor: "white"}}>
+                <Toolbar>                    
+                    <Link className="navbar-brand" to="/" style={{'color':'#E74562'}}>My Place</Link>
+                    
+                    <Link className="nav-link"
+                          to="/rentals"
+                          style={{ color: 'grey' }}
+                    >
+                        Alojamientos
+                    </Link>
+                    
+                    {isHost && renderHostActions()}
 
-                    </ul>
-                </div>
-            </nav>
-        </div>
-	);
+                    <li className="nav-item active">
+                        <Link className="nav-link" to="/auth" onClick={() => userStorage.logOutUser()}>Log out</Link>
+                    </li>
+                        
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <IconButton
+                            size="large"
+                            edge="end"
+                            aria-label="account of current user"
+                            aria-controls={menuId}
+                            aria-haspopup="true"
+                            onClick={handleProfileMenuOpen}
+                            color="primary"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                    </Box>
+                </Toolbar>
+            </AppBar>
+            {renderMenu}
+        </Box>
+    );
+
 };
 
 export default NavBar;

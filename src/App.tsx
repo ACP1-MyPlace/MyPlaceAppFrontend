@@ -25,32 +25,26 @@ const NotLoggedInWeb = () => {
 }
 
 const LoggedInWeb = () => {
+
     
     const [isHost, setHost] = useState(false)
     useEffect(() => {
         setHost(userStorage.isHost())
     })
 
-    const [isLogged, setLogged] = useState(true) // TODO revisarlo, esta renderizando la navbar cuando hace log out 
-    useEffect(() => {
-        setLogged(userStorage.isLogged())
-    },[userStorage.isLogged()])
-
-    return <>
-        {isLogged && <NavBar />}
+  return <>
         <Routes>
+          <Route element={<LayoutHome />}>
             <Route element={<PrivateRoute />}>
+
                     <Route path="/" element={<Rentals {...sampleData} />} />
                     <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
                     {!isHost && <Route path="/booking" element={<Booking {...bookingSD}/>}/>}
                     <Route path="/rentals" element={<Rentals {...sampleData} />}/>
                 
-                    {isHost &&
-                        <Route element={<LayoutHome />}>
-                            <Route path="/newplace" element={<NewPlace />} />
-                        </Route>
-                    }
+                    {isHost && <Route path="/newplace" element={<NewPlace />} />}
             </Route>
+          </Route>
         </Routes>
   </>
 }
