@@ -26,11 +26,11 @@ class Register extends Component<RegisterProps, RegisterState> {
     constructor(props: RegisterProps){
         super(props);
         this.state = {
-            firstName: 'John',
-            lastName: 'Doe',
-            email : 'john@gmail.com',
-            password: '******',
-            repeatedPassword: '******',
+            firstName: '',
+            lastName: '',
+            email : '',
+            password: '',
+            repeatedPassword: '',
             isHost: true,
             error: false,
             message: ''
