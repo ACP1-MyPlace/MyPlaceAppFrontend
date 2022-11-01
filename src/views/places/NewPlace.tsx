@@ -14,7 +14,6 @@ function NewPlace() {
     const [statusState, setStatusState] = useState({error: false, message: ''})
     const [photosInput, setPhotosInput] = useState("");
     const [uploadedPhotos, setPhotosToUpload] = useState<FileList>();
-    const [uuidNamesFromPhotos, setUuidNamesFromPhotos] = useState<string[]>([]);
 
     const newPlaceSchema = yup.object().shape({
         [PlaceFields.PropertyType]: yup.number().required('Campo obligatorio'),
@@ -53,7 +52,7 @@ function NewPlace() {
         const URL = "http://localhost:8080/api/v1/accommodations";
 
         try{
-            data.photosIds = await handleUploadPhotos();
+            data.photoIds = await handleUploadPhotos();
         } catch {
             console.log('Error with firebase')
             // setStatusState({error:true,message:'No se pudieron guardar las fotos'})
@@ -94,7 +93,6 @@ function NewPlace() {
         for ( let i=0; i<uploadedPhotos.length; i++ ){
             hashedNames.push(await handleUploadFirebaseImage(uploadedPhotos[i]));
         }
-        setUuidNamesFromPhotos(hashedNames);
         return hashedNames;
     }
     

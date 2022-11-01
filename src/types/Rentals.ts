@@ -19,7 +19,7 @@ export interface Rental {
     services?: ("WIFI" | "KITCHEN" | "TV" | "LAUNDRY")[];
     description?: string;
     price: Price;
-    photosIds?: string[];
+    photoIds?: string[];
 }
 
 export interface Rentals extends Array<Rental>{};

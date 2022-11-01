@@ -31,7 +31,7 @@ export const sampleData : Rental[] = [
             },
             amount: 120
         },
-        photosIds: ['9feadbc6-6028-9ad5-b2f7-d30cd8427ec7', '323de33a-1dca-5aeb-3439-744d7e84e6b0']
+        photoIds: ['9feadbc6-6028-9ad5-b2f7-d30cd8427ec7', '323de33a-1dca-5aeb-3439-744d7e84e6b0']
     },
     {    
         host: {

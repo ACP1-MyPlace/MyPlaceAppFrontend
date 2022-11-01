@@ -126,12 +126,12 @@ export const Rental = () => {
     const [ currentImage, setCurrentImage] = useState(0)
 
     const getImages = async () => {
-        if(!rental.photosIds)
+        if(!rental.photoIds)
             return
         let imageUrls :string[]= []
-        for (let id = 0; id < rental.photosIds.length; id++) {
-            console.log(rental.photosIds[id])
-            imageUrls.push(await getFirebaseImage(rental.photosIds[id]))
+        for (let id = 0; id < rental.photoIds.length; id++) {
+            console.log(rental.photoIds[id])
+            imageUrls.push(await getFirebaseImage(rental.photoIds[id]))
         }
         setImages(imageUrls)
     }

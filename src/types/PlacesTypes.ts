@@ -14,7 +14,7 @@
     Services = 'services',
     PricePerNight = 'price',
     Description = 'description',
-    PhotosIds = 'photosIds',
+    PhotosIds = 'photoIds',
 }
 
 export interface NewPlaceForm {

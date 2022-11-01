@@ -31,8 +31,8 @@ const renderRental = (rental: IRental): React.ReactNode => {
     }
 
     const getImage = async () => {
-        if(rental.photosIds && rental.photosIds.length != 0) 
-            setImage(await getFirebaseImage(rental.photosIds[0]))
+        if(rental.photoIds && rental.photoIds.length != 0) 
+            setImage(await getFirebaseImage(rental.photoIds[0]))
     }
 
     useEffect(()=>{
