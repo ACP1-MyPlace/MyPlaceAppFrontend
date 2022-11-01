@@ -27,7 +27,7 @@ export const handleUploadFirebaseImage = async (image:Blob) => {
 }
 
 export const getFirebaseImage = async (name:string) => {
-    return await getDownloadURL(ref(firebaseStorage, name));
+    return await getDownloadURL(ref(firebaseStorage, `files/${name}`));
 }
 
 export const deleteFirebaseImage = async (name:string) => {

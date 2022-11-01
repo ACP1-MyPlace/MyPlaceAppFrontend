@@ -51,9 +51,9 @@ function NewPlace() {
     const onNewPlace = async (data: NewPlaceForm) => {
         setStatusState({error:false,message:''})
         const URL = "http://localhost:8080/api/v1/accommodations";
-        let photosNames = []
+
         try{
-            photosNames = await handleUploadPhotos();
+            data.photosIds = await handleUploadPhotos();
         } catch {
             console.log('Error with firebase')
             // setStatusState({error:true,message:'No se pudieron guardar las fotos'})
