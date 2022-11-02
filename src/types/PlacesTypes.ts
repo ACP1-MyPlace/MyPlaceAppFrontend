@@ -14,6 +14,7 @@
     Services = 'services',
     PricePerNight = 'price',
     Description = 'description',
+    PhotosIds = 'photoIds',
 }
 
 export interface NewPlaceForm {
@@ -32,6 +33,7 @@ export interface NewPlaceForm {
     [PlaceFields.Services]: number[],
     [PlaceFields.PricePerNight]: PriceType,
     [PlaceFields.Description]?: string,
+    [PlaceFields.PhotosIds]?: string[],
 }
 
 export enum CurrencyTypeFields {
