@@ -58,7 +58,7 @@ function ReservationsList () {
                                 {
                                     reservations.map((res, index) => (
                                         <Grid item xs={12} key={`keyReservationComponent_${index}`}>
-                                            <ReservationComponent reservation={res} />
+                                            <ReservationComponent reservation={res} onReload={loadReservations} />
                                         </Grid>
                                     ))
                                 }

@@ -24,11 +24,11 @@ export interface ReservationView {
 }
 
 export enum PaymentMethodTypes {
-    CASH
+    CASH = 'CASH'
 }
 
 export enum ReservationStatus {
-    PENDING,
-    ACCEPTED,
-    NOT_ACCEPTED
+    PENDING = 'PENDING',
+    ACCEPTED = 'ACCEPTED',
+    NOT_ACCEPTED = 'NOT_ACCEPTED'
 }

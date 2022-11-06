@@ -8,6 +8,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import {Stack} from "@mui/material";
 import './Register.css';
+import {userStorage} from "../../userSession/userStorage";
 
 type RegisterProps = {}
 type RegisterState = {
@@ -117,7 +118,9 @@ class Register extends Component<RegisterProps, RegisterState> {
                 })
             if(response.status === 200) {
                 console.log('User created successfully')
-                this.setState({message: 'Se registro exitosamente, inicie sesion'})
+                this.setState({message: 'Se registro exitosamente, inicie sesion'});
+                var dataResponse = await response.json();
+                userStorage.logInUser(dataResponse.token);
             } else {
                 console.log('An error has ocurred')
                 this.setState({error: true, message: 'Ocurrio un error creando al usuario'})
