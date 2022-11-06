@@ -1,4 +1,8 @@
-﻿export enum PlaceFields {
+﻿import {User} from "./User";
+
+export enum PlaceFields {
+    Id = 'id',
+    User = 'user',
     UserId = 'userId',
     PropertyType = 'propertyType',
     Country = 'country',
@@ -34,6 +38,25 @@ export interface NewPlaceForm {
     [PlaceFields.PricePerNight]: PriceType,
     [PlaceFields.Description]?: string,
     [PlaceFields.PhotosIds]?: string[],
+}
+
+export interface Place {
+    [PlaceFields.Id]: number,
+    [PlaceFields.User]: User,
+    [PlaceFields.PropertyType]: number,
+    [PlaceFields.Country]: string,
+    [PlaceFields.State]: string,
+    [PlaceFields.Street]: string,
+    [PlaceFields.StreetNumber]: number,
+    [PlaceFields.Floor]?: string,
+    [PlaceFields.Apartment]?: string,
+    [PlaceFields.RoomsCount]: number,
+    [PlaceFields.BathroomCount]: number,
+    [PlaceFields.GarageAvailable]: boolean,
+    [PlaceFields.PetsAvailable]: boolean,
+    [PlaceFields.Services]: number[],
+    [PlaceFields.PricePerNight]: PriceType,
+    [PlaceFields.Description]?: string,
 }
 
 export enum CurrencyTypeFields {

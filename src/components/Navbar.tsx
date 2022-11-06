@@ -13,9 +13,7 @@ import './navbar.css'
 
 const renderHostActions = () => {
     return (
-
-            <Link className="nav-link" to="/newplace" style={{ color: 'grey' }}>Añadir nuevo alojamiento</Link>
-
+        <Link className="nav-link" to="/newplace" style={{ color: 'grey' }}>Añadir nuevo alojamiento</Link>
     )
 }
 
@@ -74,7 +72,9 @@ const NavBar = () => {
                     </Link>
                     
                     {isHost && renderHostActions()}
-                        
+
+                    <Link className="nav-link" to="/reservations" style={{ color: 'grey' }}>Reservas</Link>
+                    
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
