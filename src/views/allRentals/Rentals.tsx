@@ -1,34 +1,46 @@
-
-import React, { useEffect, useState } from "react";
+import React, { Component, useEffect, useState } from 'react';
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { Rental as IRental } from "../../types/Rentals";
+import { getAccommodations, getHostAccommodations } from "./rentalsActions";
 import "./rentals.css";
-import { useNavigate } from "react-router-dom";
+import { userStorage } from '../../userSession/userStorage';
 import { getFirebaseImage } from "../../firebase/FirebaseHandler";
 import { DEFAULT_PICTURE } from "../../constants";
+
+export const Rentals = () => {
+    let navigate = useNavigate();
+
+    const [accommodations, setAccommodations] : [IRental[], React.Dispatch<React.SetStateAction<any>>] = useState([]);
+
+    const isHost = userStorage.isHost()
+    
+    let accommodationsFunction = getAccommodations
+    if(isHost){ 
+        accommodationsFunction = getHostAccommodations
+    }
   
-
-
-export const Rentals = (data : IRental[]) => {
+    useEffect(() => {
+        accommodationsFunction().then((accommodations) => {
+            setAccommodations(accommodations);
+        })
+    }, []);    
 
     return (
         <section className="rentals-section">
             <div className="rentals-container">
-                {renderRental(data[0])}
-                {renderRental(data[1])}
-                {renderRental(data[0])}
-                {renderRental(data[1])}
+                {accommodations.map((rental : IRental) => renderRental(rental, navigate))}
             </div>
         </section>
     )
+    
+    return <div></div>;
+    
 }
 
-const renderRental = (rental: IRental): React.ReactNode => {
-    let navigate = useNavigate(); 
-    const [image, setImage] = useState(DEFAULT_PICTURE)
-    const routeChange = (rental: IRental) =>{ 
-      let path = `/rental`; 
-      navigate(path, {state:rental});
-    }
+const renderRental = (rental : IRental, navigate : NavigateFunction) => {  
+    const image = DEFAULT_PICTURE
+    /*const [image, setImage] = useState(DEFAULT_PICTURE)
+
 
     const getImage = async () => {
         if(rental.photoIds && rental.photoIds.length != 0) 
@@ -37,10 +49,10 @@ const renderRental = (rental: IRental): React.ReactNode => {
 
     useEffect(()=>{
         getImage()
-    },[])
+    },[])*/
 
     return (
-        <div className="rental-container" onClick={() => routeChange(rental)}>
+        <div className="rental-container" onClick={()=> {navigate("/rental", rental)}}>
             <img
                 src={image}
                 alt="Photo of rental"

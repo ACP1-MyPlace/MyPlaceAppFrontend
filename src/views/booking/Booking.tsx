@@ -11,6 +11,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { BookingLayout } from "../../layouts/BookingLayout";
 import { useNavigate } from "react-router-dom";
+import { book } from "./bookingActions"
 import "./booking.css";
 
 export const Booking = (data : IBooking) => {
@@ -87,7 +88,22 @@ export const Booking = (data : IBooking) => {
                     <Button fullWidth color="secondary" variant="contained" onClick={ () => {navigate("/")}}>
                         CANCELAR
                     </Button>
-                    <Button fullWidth color="primary" variant="contained">
+                    <Button fullWidth color="primary" variant="contained" onClick = {() => {book(
+                    {
+                        userId: 1,
+                        accommodationId: 5,
+                        startingDate: "2022-01-06T12:25:29.395Z",
+                        finishingDate: "2022-02-06T12:25:29.395Z",
+                        paymentMethod: "CASH",
+                        price: {
+                        currency: {
+                            currencyId: "USD",
+                            currencyName: "Dolares"
+                        },
+                        amount: 15000
+                        },
+                        status: "PENDING"
+                    })}}>
                         CONFIRMAR
                     </Button>
                 </CardActions>
