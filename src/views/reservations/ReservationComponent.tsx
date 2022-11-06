@@ -115,6 +115,13 @@ function ReservationComponent(props: ReservationComponentProps) {
         return `Precio por noche: ${currency} ${price}`
     }
     
+    const getAccommodationTitle = () => {
+        let country : string = props.reservation[ReservationFields.Accommodation][PlaceFields.Country];
+        let state : string = props.reservation[ReservationFields.Accommodation][PlaceFields.State];
+        let street : string = props.reservation[ReservationFields.Accommodation][PlaceFields.Street];
+        return `${street}, ${state}-${country}`
+    }
+    
     return (
         <Card>
             <CardContent>
@@ -122,7 +129,7 @@ function ReservationComponent(props: ReservationComponentProps) {
                     <Grid item xs={4}>
                         <Stack direction="column">
                             <Typography fontWeight={600} fontSize={'1.15rem'}>
-                                {props.reservation[ReservationFields.Accommodation][PlaceFields.Country]}
+                                {getAccommodationTitle()}
                             </Typography>
 
                             {renderDates()}

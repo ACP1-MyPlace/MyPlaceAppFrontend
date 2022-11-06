@@ -10,6 +10,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
 import {userStorage} from "../userSession/userStorage";
 import './navbar.css'
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import {ListItemIcon} from "@mui/material";
 
 const renderHostActions = () => {
     return (
@@ -52,9 +54,12 @@ const NavBar = () => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-            <MenuItem onClick={logOut}>Log out</MenuItem>
+            <MenuItem onClick={logOut}>
+                <ListItemIcon>
+                    <LogoutRoundedIcon fontSize="small" />
+                </ListItemIcon>
+                Salir
+            </MenuItem>
         </Menu>
     );
 
