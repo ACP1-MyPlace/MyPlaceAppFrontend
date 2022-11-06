@@ -50,7 +50,10 @@ const mapServicesToText = (service : string) => {
     if(service=="LAUNDRY"){
         return <li className="rental-description-text" key="washmachine"><FaTshirt size={"25px"} style={{"marginRight":"5px"}}/> Lavarropas</li>
     }
-    return <li className="rental-description-text" key="pet"><FaDog size={"25px"} style={{"marginRight":"5px"}}/> Pet Friendly</li>
+    if(service=="PET FRIENDLY"){
+        return <li className="rental-description-text" key="pet"><FaDog size={"25px"} style={{"marginRight":"5px"}}/> Pet Friendly</li>
+    }
+    return <></>
 }
 
 const renderServices = (rental: IRental): React.ReactNode => {

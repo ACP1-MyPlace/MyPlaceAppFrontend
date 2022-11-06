@@ -6,7 +6,8 @@ interface UserDataSession {
 
 interface UserJwtDecode {
     sub: string,
-    userType: string
+    userType: string,
+    id: number
 }
 
 class UserStorage {
@@ -56,6 +57,11 @@ class UserStorage {
     public isHost() : boolean {
         let userDecode = this.decodeToken();
         return userDecode ? userDecode.userType == "HOST_USER" : false;
+    }
+
+    public getUserId() : number | null {
+        let userDecode = this.decodeToken();
+        return userDecode ? userDecode.id : null;
     }
 }
 

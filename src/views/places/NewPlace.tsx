@@ -173,7 +173,15 @@ function NewPlace() {
                                                          fullWidth
                                     />
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <ControlledTextField label="Descripcion"
+                                                         control={methods.control}
+                                                         name={PlaceFields.Description}
+                                                         fullWidth
+                                    />
+                                </Grid>
                             </Grid>
+
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <FormProvider { ...methods }>
