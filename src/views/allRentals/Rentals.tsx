@@ -4,49 +4,57 @@ import { Rental as IRental } from "../../types/Rentals";
 import { getAccommodations, getHostAccommodations } from "./rentalsActions";
 import "./rentals.css";
 import { userStorage } from '../../userSession/userStorage';
+import { getFirebaseImage } from "../../firebase/FirebaseHandler";
+import { DEFAULT_PICTURE } from "../../constants";
 
 export const Rentals = () => {
     let navigate = useNavigate();
 
     const [accommodations, setAccommodations] : [IRental[], React.Dispatch<React.SetStateAction<any>>] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+
+    const isHost = userStorage.isHost()
+    
+    let accommodationsFunction = getAccommodations
+    if(isHost){ 
+        accommodationsFunction = getHostAccommodations
+    }
   
     useEffect(() => {
-        const isHost = userStorage.isHost()
+        accommodationsFunction().then((accommodations) => {
+            setAccommodations(accommodations);
+        })
+    }, []);    
 
-        if(isHost){ 
-            getHostAccommodations().then((accommodations) => {
-                setAccommodations(accommodations);
-            }).finally(() => {
-                setIsLoading(false);
-            })
-        }else{
-            getAccommodations().then((accommodations) => {
-                setAccommodations(accommodations);
-            }).finally(() => {
-                setIsLoading(false);
-            })
-        }
-      }, []);    
-  
-    if (!isLoading) {
-        return (
-            <section className="rentals-section">
-                <div className="rentals-container">
-                    {accommodations.map((rental : IRental) => renderRental(rental, navigate))}
-                </div>
-            </section>
-        )
-    }
+    return (
+        <section className="rentals-section">
+            <div className="rentals-container">
+                {accommodations.map((rental : IRental) => renderRental(rental, navigate))}
+            </div>
+        </section>
+    )
+    
     return <div></div>;
     
 }
 
 const renderRental = (rental : IRental, navigate : NavigateFunction) => {  
+    const image = DEFAULT_PICTURE
+    /*const [image, setImage] = useState(DEFAULT_PICTURE)
+
+
+    const getImage = async () => {
+        if(rental.photoIds && rental.photoIds.length != 0) 
+            setImage(await getFirebaseImage(rental.photoIds[0]))
+    }
+
+    useEffect(()=>{
+        getImage()
+    },[])*/
+
     return (
         <div className="rental-container" onClick={()=> {navigate("/rental", rental)}}>
             <img
-                src={'https://preview.redd.it/1b6g811jhyi51.jpg?auto=webp&s=c3ae56a6f878ea0673076d6b4044ffc5b863baad'}
+                src={image}
                 alt="Photo of rental"
                 className="img-fluid"
                 width={360}

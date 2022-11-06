@@ -3,13 +3,17 @@ import { BsWifi,  BsFillHouseFill, BsBuilding, BsFillPersonFill } from "react-ic
 import {FaDog, FaTshirt, FaSink, FaBed, FaToilet} from "react-icons/fa";
 import {FiMonitor} from "react-icons/fi";
 import {AiFillCar} from "react-icons/ai";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Rental as IRental } from "../../types/Rentals";
 import { Booking as IBooking } from "../../types/Booking";
 import "./rental.css";
 import { deleteProperty } from "./rentalActions";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import {userStorage} from "../../userSession/userStorage";
+import { DEFAULT_PICTURE } from "../../constants";
+import { getFirebaseImage } from "../../firebase/FirebaseHandler";
+
+
 
 const getRentalTypeIcon = (rental: IRental): React.ReactNode => {
     if (rental.propertyType == "APARTMENT" ){
@@ -32,21 +36,21 @@ const getRentalTypeIcon = (rental: IRental): React.ReactNode => {
 
 const mapServicesToText = (service : string) => {
     if(service=="WIFI"){
-        return <li className="rental-description-text"><BsWifi size={"25px"} style={{"marginRight":"5px"}}/> WIFI</li>
+        return <li className="rental-description-text" key="wifi"><BsWifi size={"25px"} style={{"marginRight":"5px"}}/> WIFI</li>
     }
     if(service=="TV"){
-        return <li className="rental-description-text"><FiMonitor size={"25px"} style={{"marginRight":"5px"}}/> TV</li>
+        return <li className="rental-description-text" key="tv"><FiMonitor size={"25px"} style={{"marginRight":"5px"}}/> TV</li>
     }
     if(service=="GARAGE"){
-        return <li className="rental-description-text"><AiFillCar size={"25px"} style={{"marginRight":"5px"}}/> Garage</li>
+        return <li className="rental-description-text" key="garage"><AiFillCar size={"25px"} style={{"marginRight":"5px"}}/> Garage</li>
     }
     if(service=="KITCHEN"){
-        return <li className="rental-description-text"><FaSink size={"25px"} style={{"marginRight":"5px"}}/> Cocina</li>
+        return <li className="rental-description-text" key="kitchen"><FaSink size={"25px"} style={{"marginRight":"5px"}}/> Cocina</li>
     }
     if(service=="LAUNDRY"){
-        return <li className="rental-description-text"><FaTshirt size={"25px"} style={{"marginRight":"5px"}}/> Lavarropas</li>
+        return <li className="rental-description-text" key="washmachine"><FaTshirt size={"25px"} style={{"marginRight":"5px"}}/> Lavarropas</li>
     }
-    return <li className="rental-description-text"><FaDog size={"25px"} style={{"marginRight":"5px"}}/> Pet Friendly</li>
+    return <li className="rental-description-text" key="pet"><FaDog size={"25px"} style={{"marginRight":"5px"}}/> Pet Friendly</li>
 }
 
 const renderServices = (rental: IRental): React.ReactNode => {
@@ -112,14 +116,46 @@ function renderRentalHeader(data: IRental, isHost: boolean, navigate: NavigateFu
     </div>;
 }
 
-export const Rental = (data : IRental) => {
+export const Rental = () => {
+    const {state} = useLocation();
+    const rental : IRental= state;
     let navigate = useNavigate();
     const isHost = userStorage.isHost()
-    
     const [ error, setError ] = useState(false)
+    const [ images, setImages] = useState([DEFAULT_PICTURE])
+    const [ currentImage, setCurrentImage] = useState(0)
+
+    const getImages = async () => {
+        if(!rental.photoIds)
+            return
+        let imageUrls :string[]= []
+        for (let id = 0; id < rental.photoIds.length; id++) {
+            console.log(rental.photoIds[id])
+            imageUrls.push(await getFirebaseImage(rental.photoIds[id]))
+        }
+        setImages(imageUrls)
+    }
+
+    useEffect(() => {
+        getImages()
+    },[])
+
+    const nextImage = () => {
+        if(currentImage >= images.length -1)
+            return
+        setCurrentImage(currentImage+1)
+    }
+
+    const previousImage = () => {
+        console.log("Previo setState")
+        console.log(images)
+        if(currentImage <= 0)
+            return
+        setCurrentImage(currentImage-1)
+    }
 
     return <div className="rental">
-        {renderRentalHeader(data, isHost, navigate, setError)}
+        {renderRentalHeader(rental, isHost, navigate, setError)}
 
         <div className="container">
             {error &&  <div className="alert alert-danger col-11 animate__animated animate__flipInX"> Error al realizar la acción </div>}
@@ -128,28 +164,38 @@ export const Rental = (data : IRental) => {
         <div className="row rental-body">
 
             <div className="col-5">
-                <img
-                    src={'https://preview.redd.it/1b6g811jhyi51.jpg?auto=webp&s=c3ae56a6f878ea0673076d6b4044ffc5b863baad'}
-                    alt="Photo of rental"
-                    className="img-fluid"
-                    style={{ borderRadius: 50 }}
-                />
+
+                        <img    key={images[currentImage]}
+                                src={images[currentImage]}
+                                alt="Photo of rental"
+                                className="img-fluid"
+                                style={{ borderRadius: 50 }}
+                                />
+
+                        
+                        <div className="row buttons">
+                            <div className="prev col-5" onClick={previousImage}>{`<`}</div>
+                            <div className="col-5 nav-text">{`${currentImage+1} de ${images.length}`}</div>
+                            <div className="next col-1" onClick={nextImage}>{`>`}</div>
+                        </div>
+
+
             </div>
 
             <div className="col-7">
                 <div>
                     <h3 className="rental-description-title">Descripción</h3>
-                    <p className="rental-description-text">{data.description}</p>
+                    <p className="rental-description-text">{rental.description}</p>
                     <ul>
-                        {data.roomsCount && <li className="rental-description-text"> <FaBed size={"25px"} style={{"marginRight":"5px"}}/> {data.roomsCount} habitaciones</li>}
-                        {data.bathroomCount && <li className="rental-description-text"> <FaToilet size={"25px"} style={{"marginRight":"5px"}}/> {data.bathroomCount} baños</li>}
-                        <li className="rental-description-text"> <BsFillPersonFill size={"25px"} style={{"marginRight":"5px"}}/>  Máximo 6 huespedes</li>
+                        {rental.roomsCount && <li className="rental-description-text" key="rooms"> <FaBed size={"25px"} style={{"marginRight":"5px"}}/> {rental.roomsCount} habitaciones</li>}
+                        {rental.bathroomCount && <li className="rental-description-text" key="toilets"> <FaToilet size={"25px"} style={{"marginRight":"5px"}}/> {rental.bathroomCount} baños</li>}
+                        <li className="rental-description-text" key="max-members"> <BsFillPersonFill size={"25px"} style={{"marginRight":"5px"}}/>  Máximo 6 huespedes</li>
                     </ul>
                 
                 </div>
                 <div>
                     <h3 className="rental-description-title">Servicios</h3>
-                    {renderServices(data)}
+                    {renderServices(rental)}
                 </div>
             </div>
         </div>

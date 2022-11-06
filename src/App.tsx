@@ -13,6 +13,7 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { PublicWithoutUserRoute } from "./components/PublicWithoutUserRoute";
 import { HostRoute } from './components/HostRoute';
 import { TravelerRoute } from './components/TravelerRoute';
+import ReservationsList from "./views/reservations/ReservationsList";
 
 const NotLoggedInWeb = () => {
   return <>
@@ -32,9 +33,12 @@ const LoggedInWeb = () => {
             <Route element={<PrivateRoute />}>
 
                     <Route path="/" element={<Rentals />} />
-                    <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
+                    <Route path="/rental" element={<Rental />}/>
                     
-                    <Route path="/rentals" element={<Rentals/>}/>
+                    <Route path="/rentals" element={<Rentals />}/>
+                
+                    <Route path="/reservations" element={<ReservationsList />}/>
+                
                     <Route element={<HostRoute />}>
                       <Route path="/newplace" element={<NewPlace />} />
                     </Route>
