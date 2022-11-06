@@ -36,7 +36,7 @@ export const getHostAccommodations = () => {
             fetch(URL,
             {
                 method: 'GET',
-                headers: {'Content-Type': 'application/json', 'auth': String(token)}
+                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + String(token)}
             }).then(async response => {
                 if(response.status === 200) {
                     console.log('Accommodations fetched successfully')

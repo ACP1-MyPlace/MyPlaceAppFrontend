@@ -91,7 +91,7 @@ export const Booking = (data : IBooking) => {
                     <Button fullWidth color="primary" variant="contained" onClick = {() => {book(
                     {
                         userId: 1,
-                        accommodationId: 5,
+                        accommodationId: 1,
                         startingDate: "2022-01-06T12:25:29.395Z",
                         finishingDate: "2022-02-06T12:25:29.395Z",
                         paymentMethod: "CASH",

@@ -8,6 +8,7 @@ import {NewPlaceForm, PlaceFields, PriceTypeFields, PropertyType} from "../../ty
 import NewPlaceServices from "./NewPlaceServices";
 import NewPlaceTypes from "./NewPlaceTypes";
 import { handleUploadFirebaseImage } from "../../firebase/FirebaseHandler";
+import { userStorage } from "../../userSession/userStorage";
 
 function NewPlace() {
     
@@ -30,7 +31,7 @@ function NewPlace() {
 
     const methods = useForm<NewPlaceForm>({
         defaultValues: {
-            [PlaceFields.UserId]: 1,
+            [PlaceFields.UserId]: userStorage.getUserId(),
             [PlaceFields.PropertyType]: PropertyType.HOUSE,
             [PlaceFields.Services]: [],
             [PlaceFields.RoomsCount]: 0,
@@ -62,7 +63,7 @@ function NewPlace() {
             const response = await fetch(URL,
                 {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {'Content-Type': 'application/json', 'Authorization':'Bearer ' + userStorage.getToken()},
                     body: JSON.stringify(data)
                 })
             if(response.status === 200) {

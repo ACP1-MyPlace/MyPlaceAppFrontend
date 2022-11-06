@@ -59,9 +59,9 @@ class UserStorage {
         return userDecode ? userDecode.userType == "HOST_USER" : false;
     }
 
-    public getUserId() : number | null {
+    public getUserId() : number {
         let userDecode = this.decodeToken();
-        return userDecode ? userDecode.id : null;
+        return userDecode ? userDecode.id : -1;
     }
 }
 
