@@ -1,35 +1,50 @@
-
-import React from "react";
+import React, { Component, useEffect, useState } from 'react';
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { Rental as IRental } from "../../types/Rentals";
+import { getAccommodations, getHostAccommodations } from "./rentalsActions";
 import "./rentals.css";
-import { useNavigate } from "react-router-dom";
+import { userStorage } from '../../userSession/userStorage';
+
+export const Rentals = () => {
+    let navigate = useNavigate();
+
+    const [accommodations, setAccommodations] : [IRental[], React.Dispatch<React.SetStateAction<any>>] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
   
+    useEffect(() => {
+        const isHost = userStorage.isHost()
 
-
-export const Rentals = (data : IRental[]) => {
-
-    return (
-        <section className="rentals-section">
-            <div className="rentals-container">
-                {renderRental(data[0])}
-                {renderRental(data[1])}
-                {renderRental(data[0])}
-                {renderRental(data[1])}
-            </div>
-        </section>
-    )
+        if(isHost){ 
+            getHostAccommodations().then((accommodations) => {
+                setAccommodations(accommodations);
+            }).finally(() => {
+                setIsLoading(false);
+            })
+        }else{
+            getAccommodations().then((accommodations) => {
+                setAccommodations(accommodations);
+            }).finally(() => {
+                setIsLoading(false);
+            })
+        }
+      }, []);    
+  
+    if (!isLoading) {
+        return (
+            <section className="rentals-section">
+                <div className="rentals-container">
+                    {accommodations.map((rental : IRental) => renderRental(rental, navigate))}
+                </div>
+            </section>
+        )
+    }
+    return <div></div>;
+    
 }
 
-const renderRental = (rental: IRental): React.ReactNode => {
-    let navigate = useNavigate(); 
-
-    const routeChange = (rental: IRental) =>{ 
-      let path = `/rental`; 
-      navigate(path, rental);
-    }
-
+const renderRental = (rental : IRental, navigate : NavigateFunction) => {  
     return (
-        <div className="rental-container" onClick={() => routeChange(rental)}>
+        <div className="rental-container" onClick={()=> {navigate("/rental", rental)}}>
             <img
                 src={'https://preview.redd.it/1b6g811jhyi51.jpg?auto=webp&s=c3ae56a6f878ea0673076d6b4044ffc5b863baad'}
                 alt="Photo of rental"

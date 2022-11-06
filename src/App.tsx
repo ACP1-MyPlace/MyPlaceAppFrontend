@@ -31,10 +31,10 @@ const LoggedInWeb = () => {
           <Route element={<LayoutHome />}>
             <Route element={<PrivateRoute />}>
 
-                    <Route path="/" element={<Rentals {...sampleData} />} />
+                    <Route path="/" element={<Rentals />} />
                     <Route path="/rental" element={<Rental {...sampleData[0]} />}/>
                     
-                    <Route path="/rentals" element={<Rentals {...sampleData} />}/>
+                    <Route path="/rentals" element={<Rentals/>}/>
                     <Route element={<HostRoute />}>
                       <Route path="/newplace" element={<NewPlace />} />
                     </Route>
