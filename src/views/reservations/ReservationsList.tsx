@@ -16,7 +16,7 @@ function ReservationsList () {
         let token = userStorage.getToken() || '';
         let headers = {
             'Content-Type': 'application/json',
-            'auth': token
+            'Authorization': 'Bearer ' + token
         }
         
         try {
