@@ -12,6 +12,7 @@ import { userStorage } from "../../userSession/userStorage";
 
 function NewPlace() {
     
+    const [loadingState, setLoadingState] = useState(false)
     const [statusState, setStatusState] = useState({error: false, message: ''})
     const [photosInput, setPhotosInput] = useState("");
     const [uploadedPhotos, setPhotosToUpload] = useState<FileList>();
@@ -49,6 +50,10 @@ function NewPlace() {
     });
     
     const onNewPlace = async (data: NewPlaceForm) => {
+        if(loadingState){
+            return;
+        }
+        setLoadingState(true)
         setStatusState({error:false,message:''})
         const URL = "http://localhost:8080/api/v1/accommodations";
 
@@ -66,6 +71,7 @@ function NewPlace() {
                     headers: {'Content-Type': 'application/json', 'Authorization':'Bearer ' + userStorage.getToken()},
                     body: JSON.stringify(data)
                 })
+                setLoadingState(false)
             if(response.status === 200) {
                 console.log('Place created successfully')
                 setStatusState({error:false,message:'Alojamiento creado exitosamente'})
@@ -75,8 +81,10 @@ function NewPlace() {
             }
         } catch {
             console.log('No response from server')
+            setLoadingState(false)
             setStatusState({error:true,message:'No hay respuesta del servidor'})
         }
+        
     }
 
     const handlePhotosSelection = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -213,6 +221,7 @@ function NewPlace() {
                 </Card>
 
                 &nbsp;
+                {loadingState && <div className="alert alert-info animate__animated animate__flipInX"> Cargando... </div>}
                 {statusState.error &&  <div className="alert alert-danger animate__animated animate__flipInX"> {statusState.message} </div>}
                 {!statusState.error && statusState.message.length!=0 && <div className="alert alert-success animate__animated animate__flipInX"> {statusState.message} </div>}
             </Grid>

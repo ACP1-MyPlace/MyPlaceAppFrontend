@@ -100,7 +100,7 @@ function ReservationComponent(props: ReservationComponentProps) {
                 props.onReload();
             } else {
                 console.log('An error has ocurred')
-                setStatusState({error:true,message:'Ocurrio un error creando el alojamiento'})
+                setStatusState({error:true,message:'Ocurrio un error actualizando la reserva'})
             }
         } catch {
             console.log('No response from server')

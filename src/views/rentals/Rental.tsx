@@ -107,8 +107,8 @@ function renderRentalHeader(data: IRental, isHost: boolean, navigate: NavigateFu
     return <div className="row rental-header">
 
         <div className="col-7">
-            <h2 className="rental-address">{data.country}, {data.state}</h2>
-            <h2 className="rental-address">{data.street} {data.streetNumber} {data.floor && `- ${data.floor} Piso`}</h2>
+            <h2 className="rental-address">{data.country}, {data.state}, {data.street} {data.streetNumber} {data.floor && `- ${data.floor} Piso`}</h2>
+
         </div>
 
         <div className="col-5">
@@ -192,7 +192,7 @@ export const Rental = () => {
                     <ul>
                         {rental.roomsCount && <li className="rental-description-text" key="rooms"> <FaBed size={"25px"} style={{"marginRight":"5px"}}/> {rental.roomsCount} habitaciones</li>}
                         {rental.bathroomCount && <li className="rental-description-text" key="toilets"> <FaToilet size={"25px"} style={{"marginRight":"5px"}}/> {rental.bathroomCount} baños</li>}
-                        <li className="rental-description-text" key="max-members"> <BsFillPersonFill size={"25px"} style={{"marginRight":"5px"}}/>  Máximo 6 huespedes</li>
+                        {/* <li className="rental-description-text" key="max-members"> <BsFillPersonFill size={"25px"} style={{"marginRight":"5px"}}/>  Máximo 2 huespedes</li> */}
                     </ul>
                 
                 </div>
