@@ -102,7 +102,7 @@ export const Booking = () => {
                     </Button>
                     <Button fullWidth color="primary" variant="contained" onClick = {() => {book(
                     {
-                        userId: 1, //user.id
+                        userId: userId,
                         accommodationId: rental.id,
                         startingDate: startingDate,
                         finishingDate: finishingDate,
