@@ -19,7 +19,8 @@ export const Booking = () => {
     const {state} = useLocation();
     const rental : IRental = state;
     let navigate = useNavigate();
-
+    const [loading, setLoading] = useState(false)
+    const [reservationReqState, setReservationReqState] = useState({error: false, msg: ''})
     let [startingDate, setStartingDate] = React.useState<Dayjs | null>(
         dayjs('2022-11-09T21:11:54'),
     );
@@ -41,7 +42,36 @@ export const Booking = () => {
     const userId = userStorage.getUserId();
     const userMail = userStorage.getMail();
 
-    return (
+    const sendReservationRequest = () => {
+        if (loading) {
+            return;
+        }
+        setReservationReqState({ error: false, msg: '' });
+        setLoading(true);
+        book(
+            {
+                userId: userId,
+                accommodationId: rental.id,
+                startingDate: startingDate,
+                finishingDate: finishingDate,
+                paymentMethod: isCash ? "CASH" : "CASH",
+                price: {
+                    currency: {
+                        currencyId: rental.price.currency.currencyId,
+                        currencyName: rental.price.currency.currencyName
+                    },
+                    amount: rental.price.amount
+                },
+                status: "PENDING"
+            }).then(() => {
+                setLoading(false);
+                setReservationReqState({ error: false, msg: 'Reserva creada exitosamente' });
+            }).catch(() => {
+                setLoading(false);
+                setReservationReqState({ error: true, msg: 'Error creando la reserva, ya esta ocupada!' });
+            });
+    };
+    return <>
         <BookingLayout>
             <Card sx={{ minWidth: '70%' }}>
                 <CardContent>
@@ -100,28 +130,20 @@ export const Booking = () => {
                     <Button fullWidth color="secondary" variant="contained" onClick={ () => {navigate("/")}}>
                         CANCELAR
                     </Button>
-                    <Button fullWidth color="primary" variant="contained" onClick = {() => {book(
-                    {
-                        userId: userId,
-                        accommodationId: rental.id,
-                        startingDate: startingDate,
-                        finishingDate: finishingDate,
-                        paymentMethod: isCash ? "CASH" : "CASH", // : OTRO METODO
-                        price: {
-                        currency: {
-                            currencyId: rental.price.currency.currencyId,
-                            currencyName: rental.price.currency.currencyName
-                        },
-                        amount: rental.price.amount
-                        },
-                        status: "PENDING"
-                    })}}>
+                    <Button fullWidth color="primary" variant="contained" onClick = {sendReservationRequest}>
                         CONFIRMAR
                     </Button>
                 </CardActions>
             </Card>
+
+
         </BookingLayout>
-    )
+
+        &nbsp;
+        {loading && <div className="alert alert-info animate__animated animate__flipInX"> Cargando... </div>}
+        {reservationReqState.error && <div className="alert alert-danger animate__animated animate__flipInX"> {reservationReqState.msg} </div>}
+        {!reservationReqState.error && reservationReqState.msg && <div className="alert alert-success animate__animated animate__flipInX"> {reservationReqState.msg} </div>}
+    </>
 }
 
 function checkbox(name: string, checked: boolean, onChange: any) {
