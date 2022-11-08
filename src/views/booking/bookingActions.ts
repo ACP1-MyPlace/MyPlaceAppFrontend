@@ -1,12 +1,15 @@
+import {userStorage} from "../../userSession/userStorage";
+
 export const book = (booking: any)  => {
     return new Promise<void>(
         (resolve, reject) => {
             const URL = "http://localhost:8080/api/v1/reservations";
+            const token = userStorage.getToken()
 
             fetch(URL,
             {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer '+ token},
                 body: JSON.stringify(booking)
             }).then(async response => {
                 if(response.status === 200) {

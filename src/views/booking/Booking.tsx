@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import dayjs, { Dayjs } from 'dayjs';
-import { Booking as IBooking } from "../../types/Booking";
+import { Rental as IRental } from "../../types/Rentals";
 import Checkbox from '@mui/material/Checkbox';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
@@ -10,22 +10,37 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { BookingLayout } from "../../layouts/BookingLayout";
-import { useNavigate } from "react-router-dom";
+import { userStorage } from "../../userSession/userStorage";
+import { useLocation, useNavigate } from "react-router-dom";
 import { book } from "./bookingActions"
 import "./booking.css";
 
-export const Booking = (data : IBooking) => {
+export const Booking = () => {
+    const {state} = useLocation();
+    const rental : IRental = state;
     let navigate = useNavigate();
 
-    const [value, setValue] = React.useState<Dayjs | null>(
-        dayjs('2014-08-18T21:11:54'),
+    let [startingDate, setStartingDate] = React.useState<Dayjs | null>(
+        dayjs('2022-11-09T21:11:54'),
     );
 
-    const handleChange = (newValue: Dayjs | null) => {
-        setValue(newValue);
+    let [finishingDate, setFinishingDate] = React.useState<Dayjs | null>(
+        dayjs('2022-11-19T21:11:54'),
+    );
+
+    let [ isCash, setIsCash ] = useState(true)
+
+    const handleChangeStartingDate = (newValue: Dayjs | null) => {
+        setStartingDate(newValue);
     };
 
-      
+    const handleChangeFinishingDate = (newValue: Dayjs | null) => {
+        setFinishingDate(newValue);
+    };
+
+    const userId = userStorage.getUserId();
+    const userMail = userStorage.getMail();
+
     return (
         <BookingLayout>
             <Card sx={{ minWidth: '70%' }}>
@@ -40,15 +55,12 @@ export const Booking = (data : IBooking) => {
                                 Tus datos
                             </Typography>
                             <Stack spacing={2}>
-                                <TextField variant="outlined"
-                                            label="Nombre"
-                                            size="small" />
-                                <TextField variant="outlined"
-                                            label="Apellido"
-                                            size="small" />
-                                <TextField variant="outlined"
-                                            label="Email"
-                                            size="small"/>
+                                <TextField
+                                        disabled  
+                                        variant="outlined"
+                                        label="Email"
+                                        size="small"
+                                        value={userMail}/>
                             </Stack>
                         </Grid>
                         <Grid item xs={2}/>
@@ -61,8 +73,8 @@ export const Booking = (data : IBooking) => {
                                     <DesktopDatePicker
                                         label="Reservar desde"
                                         inputFormat="DD/MM/YYYY"
-                                        value={value}
-                                        onChange={handleChange}
+                                        value={startingDate}
+                                        onChange={handleChangeStartingDate}
                                         renderInput={(params) => <TextField {...params} />}
                                     />                 
                                 </LocalizationProvider>
@@ -70,14 +82,14 @@ export const Booking = (data : IBooking) => {
                                     <DesktopDatePicker
                                         label="Reservar hasta"
                                         inputFormat="DD/MM/YYYY"
-                                        value={value}
-                                        onChange={handleChange}
+                                        value={finishingDate}
+                                        onChange={handleChangeFinishingDate}
                                         renderInput={(params) => <TextField {...params} />}
                                     />                 
                                 </LocalizationProvider>
                                 <div className='payment'>
-                                    {checkbox('Efectivo', true, null)}
-                                    {checkbox('Tarjeta de Credito/Debito', false, null)}
+                                    {checkbox('Efectivo', isCash, () => setIsCash(true))}
+                                    {checkbox('Tarjeta de Credito/Debito', !isCash, () => setIsCash(false))}
                                 </div>
                             </Stack>
                         </Grid>
@@ -90,17 +102,17 @@ export const Booking = (data : IBooking) => {
                     </Button>
                     <Button fullWidth color="primary" variant="contained" onClick = {() => {book(
                     {
-                        userId: 1,
-                        accommodationId: 1,
-                        startingDate: "2022-01-06T12:25:29.395Z",
-                        finishingDate: "2022-02-06T12:25:29.395Z",
-                        paymentMethod: "CASH",
+                        userId: 1, //user.id
+                        accommodationId: rental.id,
+                        startingDate: startingDate,
+                        finishingDate: finishingDate,
+                        paymentMethod: isCash ? "CASH" : "CASH", // : OTRO METODO
                         price: {
                         currency: {
-                            currencyId: "USD",
-                            currencyName: "Dolares"
+                            currencyId: rental.price.currency.currencyId,
+                            currencyName: rental.price.currency.currencyName
                         },
-                        amount: 15000
+                        amount: rental.price.amount
                         },
                         status: "PENDING"
                     })}}>
