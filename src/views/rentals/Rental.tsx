@@ -85,8 +85,7 @@ const renderServices = (rental: IRental): React.ReactNode => {
 
 const renderActionButton = (isHost: boolean, rentalData:IRental, navigate: NavigateFunction, setError: { (value: React.SetStateAction<boolean>): void; (arg0: boolean): any; (arg0: boolean): any; }) => {
     if(!isHost){
-        const data : IBooking = {price: rentalData.price}
-        return <button className="rental-reservation-button" onClick={()=> { navigate("/booking", {state: data}) }}>
+        return <button className="rental-reservation-button" onClick={()=> { navigate("/booking", {state: rentalData}) }}>
             Reservar
             </button>
     }

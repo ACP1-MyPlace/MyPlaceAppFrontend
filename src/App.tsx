@@ -43,7 +43,7 @@ const LoggedInWeb = () => {
                       <Route path="/newplace" element={<NewPlace />} />
                     </Route>
                     <Route element={<TravelerRoute />}>
-                      <Route path="/booking" element={<Booking {...bookingSD}/>}/>
+                      <Route path="/booking" element={<Booking />}/>
                     </Route>
             </Route>
           </Route>
