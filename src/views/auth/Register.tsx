@@ -116,12 +116,14 @@ class Register extends Component<RegisterProps, RegisterState> {
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(body)
                 })
-            if(response.status === 200) {
+            if(response.status === 200 || response.status === 204) {
                 console.log('User created successfully')
                 this.setState({message: 'Se registro exitosamente, inicie sesion'});
-                var dataResponse = await response.json();
-                userStorage.logInUser(dataResponse.token);
-            } else {
+            } else if (response.status === 409) {
+                console.log('User already exists')
+                this.setState({message: 'El usuario ya existe'});
+            }
+            else {
                 console.log('An error has ocurred')
                 this.setState({error: true, message: 'Ocurrio un error creando al usuario'})
             }
