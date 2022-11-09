@@ -121,7 +121,7 @@ class Register extends Component<RegisterProps, RegisterState> {
                 this.setState({message: 'Se registro exitosamente, inicie sesion'});
             } else if (response.status === 409) {
                 console.log('User already exists')
-                this.setState({message: 'El usuario ya existe'});
+                this.setState({error: true, message: 'El usuario ya existe'});
             }
             else {
                 console.log('An error has ocurred')
